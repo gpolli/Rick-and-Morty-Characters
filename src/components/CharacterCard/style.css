@@ -1,0 +1,22 @@
+.character-card {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.character-card__image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.character-card__info-group {
+  display: flex;
+}
+
+.character-card__info-label {
+  font-weight: bold;
+  text-transform: uppercase;
+}
