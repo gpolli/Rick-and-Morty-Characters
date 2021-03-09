@@ -1,8 +1,19 @@
 import React from 'react';
 
-const CharacterCard = () => {
+const CharacterCard = ({ character }) => {
+  const { name, status, species, type, gender, image } = character;
+
   return (
-    <div>Character Card</div>
+    <div>
+      <img src={image} alt={name} />
+      <section>
+        <p>{name}</p>
+        <p>{status}</p>
+        <p>{species}</p>
+        <p>{type}</p>
+        <p>{gender}</p>
+      </section>
+    </div>
   );
 }
 

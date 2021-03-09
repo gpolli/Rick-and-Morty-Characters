@@ -1,9 +1,15 @@
 import React from 'react';
+/* Components */
+import CharacterCard from '../CharacterCard';
 
-const CharactersList = () => {
+const CharactersList = ({ characters }) => {
   return (
     <section>
-      CharactersList
+      {
+        characters.length
+          ? characters.map(character => (<CharacterCard character={character} />))
+          : "No characters found"
+      }
     </section>
   );
 }
