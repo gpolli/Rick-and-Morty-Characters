@@ -30,11 +30,16 @@ const Homepage = () => {
     getInitialData();
   }, []);
 
+  // Per controllo
+  useEffect(function () {
+    console.log(charactersList);
+  }, [charactersList]);
+
   return (
     <>
       <h1>Rick & Morty Characters</h1>
       <main>
-        <Pagination apiEndpoint={apiEndpoint} currentPage={currentPage} pages={pages}>
+        <Pagination apiEndpoint={apiEndpoint} initialPage={currentPage} pages={pages}>
           <CharactersList characters={charactersList} />
         </Pagination>
       </main>
