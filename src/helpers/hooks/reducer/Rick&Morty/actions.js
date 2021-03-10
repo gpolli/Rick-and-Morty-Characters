@@ -13,7 +13,7 @@ export const actions = {
       payload,
     };
   },
-  addLocation: (payload) => {
+  addLocations: (payload) => {
     return {
       type: ACTION_TYPES.ADD_LOCATIONS,
       payload,

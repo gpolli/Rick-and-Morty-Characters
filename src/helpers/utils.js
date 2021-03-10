@@ -1,3 +1,15 @@
+export const objectIsEmpty = (object) => {
+  if (Object.keys(object).length === 0 && object.constructor === Object) {
+    return true;
+  }
+
+  return false;
+};
+
+export const removeDuplicatesFromList = (list) => {
+  return list.filter((item, currentIndex) => list.indexOf(item) === currentIndex);
+}
+
 export const handleAPIRequest = async (endpoint, callback) => {
   const response = await fetch(endpoint);
   const json = await response.json();
@@ -13,6 +25,10 @@ export const setIdAsObjectKey = (object) => {
 
 export const groupListByPageIndex = (list, pageIndex) => {
   return { [pageIndex]: list }
+}
+
+export const groupObjectByProperty = (object, property) => {
+  return { [property]: object }
 }
 
 export const getSortedListOfObject = (list) => {

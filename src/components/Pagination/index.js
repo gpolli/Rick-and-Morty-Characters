@@ -19,8 +19,8 @@ const Pagination = ({ children }) => {
     const json = await response.json();
     const { results } = json;
 
-    dispatch(updatePagination({ currentPage: pageIndex }));
     dispatch(addCharacters({ list: results, pageIndex }));
+    dispatch(updatePagination({ currentPage: pageIndex }));
   }
 
   function updateCurrentPageData(pageIndex) {

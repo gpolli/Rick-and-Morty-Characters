@@ -1,6 +1,6 @@
 import { ACTION_TYPES } from './actionTypes';
 /* Helpers */
-import { groupListByPageIndex, getSortedListOfObject, joinObjectsFromList } from '../../../utils';
+import { groupListByPageIndex, groupObjectByProperty, getSortedListOfObject, joinObjectsFromList } from '../../../utils';
 
 export const initialState = {
   pagination: {
@@ -22,7 +22,7 @@ export const reducer = (state, action) => {
         ...state,
         pagination: newPagination,
       };
-    case ACTION_TYPES.ADD_CHARACTERS:
+    case ACTION_TYPES.ADD_CHARACTERS: {
       const objectToJoin = groupListByPageIndex(action.payload.list, action.payload.pageIndex);
       const newCharacters = { ...state.characters, ...objectToJoin };
 
@@ -30,13 +30,16 @@ export const reducer = (state, action) => {
         ...state,
         characters: newCharacters
       }
-    case ACTION_TYPES.ADD_LOCATIONS:
-      const newLocations = { ...state.locations, ...action.payload };
+    }
+    case ACTION_TYPES.ADD_LOCATIONS: {
+      const objectToJoin = joinObjectsFromList(action.payload.map(location => groupObjectByProperty(location, location.name)))
+      const newLocations = { ...state.locations, ...objectToJoin };
 
       return {
         ...state,
         locations: newLocations
       }
+    }
     case ACTION_TYPES.ADD_EPISODES:
       const newEpisodes = { ...state.episodes, ...action.payload };
 
