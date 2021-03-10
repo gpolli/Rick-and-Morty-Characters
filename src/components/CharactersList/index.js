@@ -4,7 +4,7 @@ import CharacterCard from '../CharacterCard';
 /* Style */
 import './style.css';
 
-const CharactersList = ({ characters }) => {
+const CharactersList = ({ characters = [] }) => {
   return (
     <section>
       {

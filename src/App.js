@@ -1,13 +1,13 @@
 /* Custom Hooks */
-import { CharactersProvider } from './helpers/hooks/CharactersContext';
+import { GlobalProvider } from './helpers/hooks/context/Rick&Morty/GlobalContext';
 /* Pages */
 import Homepage from './pages/Homepage';
 
 function App() {
   return (
-    <CharactersProvider>
+    <GlobalProvider>
       <Homepage />
-    </CharactersProvider>
+    </GlobalProvider>
   );
 }
 
