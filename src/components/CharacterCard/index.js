@@ -1,35 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+/* Components */
+import Pagination from '../Pagination';
+import CardInfoList from '../CardInfoList';
+/* Custom Hooks */
+import { useGlobal } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
+/* Helpers */
+import { objectIsEmpty } from '../../helpers/utils';
 /* Style */
 import './style.css';
 
-const CharacterCard = ({ character, parentClass }) => {
-  const { name, status, species, type, gender, image } = character;
+const CharacterCard = ({ content, character, parentClass }) => {
+  const { name, image, } = character;
+  const [cardContent, setCardContent] = useState({});
+  const [paginationLabels, setPaginationLabels] = useState({});
+
+  const createPaginationLabelEnum = (content) => {
+    if (!objectIsEmpty(content['dynamic'])) {
+      const paginationLabelEnum = Object.keys(content['dynamic']).reduce((accumulator, currentValue, index) => {
+        return { ...accumulator, [index + 1]: currentValue }
+      }, {});
+
+      return Object.freeze(paginationLabelEnum);
+    }
+
+    return {};
+  };
+
+  function updateContent(key) {
+    if (!objectIsEmpty(paginationLabels)) {
+      const currentContent = paginationLabels[key];
+
+      setCardContent({ [currentContent]: content['dynamic'][currentContent] });
+    }
+  }
+
+  useEffect(function () {
+    if (!objectIsEmpty(paginationLabels)) {
+      const currentContent = paginationLabels[1];
+
+      setCardContent({ [currentContent]: content['dynamic'][currentContent] });
+    }
+  }, [paginationLabels]);
+
+  useEffect(function () {
+    setPaginationLabels(createPaginationLabelEnum(content));
+  }, [content]);
 
   return (
     <div className={`${parentClass} character-card`}>
       <img className="character-card__image" src={image} alt={name} />
-      <section className="character-card__registry">
-        <div className="character-card__info-group">
-          <p className="character-card__info-label">Name: </p>
-          <p className="character-card__info-value">{name}</p>
-        </div>
-        <div className="character-card__info-group">
-          <p className="character-card__info-label">Status: </p>
-          <p className="character-card__info-value">{status}</p>
-        </div>
-        <div className="character-card__info-group">
-          <p className="character-card__info-label">Species: </p>
-          <p className="character-card__info-value">{species}</p>
-        </div>
-        <div className="character-card__info-group">
-          <p className="character-card__info-label">Type: </p>
-          <p className="character-card__info-value">{type}</p>
-        </div>
-        <div className="character-card__info-group">
-          <p className="character-card__info-label">Gender: </p>
-          <p className="character-card__info-value">{gender}</p>
-        </div>
-      </section>
+
+      <Pagination
+        content={cardContent}
+        updateContent={key => updateContent(key)}
+        totalPages={Object.keys(content['dynamic']).length}
+        buttonGroupSettings={{ labels: paginationLabels, amountToShow: 4, showStartButton: false, showEndButton: false }}
+        render={(content) => (<CardInfoList content={content} />)}
+      />
     </div>
   );
 }

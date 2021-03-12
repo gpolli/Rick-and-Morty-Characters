@@ -38,10 +38,10 @@ const CharactersList = ({ content = { characters: [], location: [], episodes: []
       // console.log('episodes: ', originName, locationName);
 
       return {
-        statics: {
+        static: {
           image
         },
-        dynamics: {
+        dynamic: {
           profile: {
             name,
             status,
@@ -53,13 +53,13 @@ const CharactersList = ({ content = { characters: [], location: [], episodes: []
             name: originName !== "unknown" ? originName : "Unknown",
             dimension: originName !== "unknown" ? data['locations'][originName]['dimension'] : "Unknown",
             type: originName !== "unknown" ? data['locations'][originName]['type'] : "Unknown",
-            amountOfResidents: originName !== "unknown" ? data['locations'][originName]['residents'].length : "Unknown",
+            'amount of residents': originName !== "unknown" ? data['locations'][originName]['residents'].length : "Unknown",
           },
           location: {
             name: locationName !== "unknown" ? locationName : "Unknown",
             dimension: locationName !== "unknown" ? data['locations'][locationName]['dimension'] : "Unknown",
             type: locationName !== "unknown" ? data['locations'][locationName]['type'] : "Unknown",
-            amountOfResidents: locationName !== "unknown" ? data['locations'][locationName]['residents'].length : "Unknown",
+            'amount of residents': locationName !== "unknown" ? data['locations'][locationName]['residents'].length : "Unknown",
           },
           episodes: getEpisodesInfo(getEpisodesIndexes(episodes), data['episodes']),
         }
@@ -70,10 +70,10 @@ const CharactersList = ({ content = { characters: [], location: [], episodes: []
       // console.log('locations: ', originName, locationName);
 
       return {
-        statics: {
+        static: {
           image
         },
-        dynamics: {
+        dynamic: {
           profile: {
             name,
             status,
@@ -85,13 +85,13 @@ const CharactersList = ({ content = { characters: [], location: [], episodes: []
             name: originName !== "unknown" ? originName : "Unknown",
             dimension: originName !== "unknown" ? data['locations'][originName]['dimension'] : "Unknown",
             type: originName !== "unknown" ? data['locations'][originName]['type'] : "Unknown",
-            amountOfResidents: originName !== "unknown" ? data['locations'][originName]['residents'].length : "Unknown",
+            'amount of residents': originName !== "unknown" ? data['locations'][originName]['residents'].length : "Unknown",
           },
           location: {
             name: locationName !== "unknown" ? locationName : "Unknown",
             dimension: locationName !== "unknown" ? data['locations'][locationName]['dimension'] : "Unknown",
             type: locationName !== "unknown" ? data['locations'][locationName]['type'] : "Unknown",
-            amountOfResidents: locationName !== "unknown" ? data['locations'][locationName]['residents'].length : "Unknown",
+            'amount of residents': locationName !== "unknown" ? data['locations'][locationName]['residents'].length : "Unknown",
           },
           episodes: [],
         }
@@ -99,10 +99,10 @@ const CharactersList = ({ content = { characters: [], location: [], episodes: []
     }
 
     return {
-      statics: {
+      static: {
         image
       },
-      dynamics: {
+      dynamic: {
         profile: {
           name,
           status,

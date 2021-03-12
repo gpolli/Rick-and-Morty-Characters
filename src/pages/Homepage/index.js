@@ -14,6 +14,17 @@ const Homepage = () => {
   const { currentPage, totalPages } = state.pagination;
   const { updatePagination, addCharacters, addLocations, addEpisodes } = actions;
   const [pageContent, setPageContent] = useState({ characters: [] });
+  const [paginationLabels, setPaginationLabels] = useState({});
+
+  const createPaginationLabelEnum = (total) => {
+    const paginationLabelEnum = {};
+
+    for (let i = 1; i <= total; i++) {
+      paginationLabelEnum[i] = i;
+    }
+
+    return Object.freeze(paginationLabelEnum);
+  }
 
   const formatResponse = (response) => {
     if (Array.isArray(response)) return response;
@@ -213,10 +224,15 @@ const Homepage = () => {
     }
   }, [pageContent.locations]);
 
+  useEffect(function () {
+    setPaginationLabels(createPaginationLabelEnum(totalPages));
+  }, [totalPages]);
+
   function updateContent(key) {
     dispatch(updatePagination({ currentPage: key }));
     retrieveData('characters', key, state);
   }
+
 
   // test
   // useEffect(function () {
@@ -233,7 +249,12 @@ const Homepage = () => {
     <>
       <h1>Rick & Morty Characters</h1>
       <main>
-        <Pagination content={pageContent} updateContent={(key) => updateContent(key)} totalPages={totalPages} render={content => (<CharactersList content={content} />)} />
+        <Pagination
+          content={pageContent}
+          updateContent={(key) => updateContent(key)}
+          totalPages={totalPages}
+          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true }}
+          render={content => (<CharactersList content={content} />)} />
       </main>
     </>
   );
