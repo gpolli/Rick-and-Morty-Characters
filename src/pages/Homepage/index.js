@@ -6,16 +6,15 @@ import CharactersList from '../../components/CharactersList';
 import { useGlobal, useGlobalUpdater } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
 import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Helpers */
-import { objectIsEmpty, removeDuplicatesFromList, handleAPIRequest } from '../../helpers/utils';
+import { removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
 
 const Homepage = () => {
   const state = useGlobal();
   const dispatch = useGlobalUpdater();
-  const { currentPage } = state.pagination;
+  const { currentPage, totalPages } = state.pagination;
   const { updatePagination, addCharacters, addLocations, addEpisodes } = actions;
   const [pageContent, setPageContent] = useState({ characters: [] });
 
-  /* new */
   const formatResponse = (response) => {
     if (Array.isArray(response)) return response;
 
@@ -102,7 +101,6 @@ const Homepage = () => {
           });
         }
 
-        // dataIndexesNotAlreadyStored = dataIndexesListWithoutDuplicates.filter(index => !Object.values(store['locations']).some(location => location.id === Number(index)));
         break;
       }
       case 'episode': {
@@ -121,7 +119,6 @@ const Homepage = () => {
           }
         });
 
-        // dataIndexesNotAlreadyStored = dataIndexesListWithoutDuplicates.filter(index => !Object.values(store['episodes']).some(episode => episode.id === Number(index)));
         break;
       }
       default:
@@ -137,7 +134,7 @@ const Homepage = () => {
           setPageContent({ ...pageContent, characters: store['characters'][key] });
         } else {
           const successCallback = function (response, pageIndex) {
-            const { info, results } = response.data;
+            const { results } = response.data;
 
             dispatch(addCharacters({ list: results, pageIndex }));
             setPageContent({ ...pageContent, characters: results })
@@ -160,12 +157,12 @@ const Homepage = () => {
             response = formatResponse(response);
 
             dispatch(addLocations(response));
-            setPageContent({ ...pageContent, locations: [...storedData, ...response] })
+            setPageContent({ ...pageContent, locations: joinObjectsFromList([...storedData, ...response].map(location => groupObjectByProperty(location, location.name))) })
           }
 
           fetchLocationsData(mergedDataIndexedToRequire, successCallback);
         } else {
-          setPageContent({ ...pageContent, locations: storedData })
+          setPageContent({ ...pageContent, locations: joinObjectsFromList(storedData.map(location => groupObjectByProperty(location, location.name))) })
         }
 
         break;
@@ -179,12 +176,12 @@ const Homepage = () => {
             response = formatResponse(response);
 
             dispatch(addEpisodes(response));
-            setPageContent({ ...pageContent, episodes: [...storedData, ...response] })
+            setPageContent({ ...pageContent, episodes: joinObjectsFromList([...storedData, ...response].map(episode => groupObjectByProperty(episode, episode.id))) })
           }
 
           fetchEpisodesData(dataIndexes['toRequire'], successCallback);
         } else {
-          setPageContent({ ...pageContent, episodes: storedData })
+          setPageContent({ ...pageContent, episodes: joinObjectsFromList(storedData.map(episode => groupObjectByProperty(episode, episode.id))) })
         }
 
         break;
@@ -193,7 +190,15 @@ const Homepage = () => {
   }
 
   useEffect(function () {
-    updateContent(1);
+    const successCallback = function (response, pageIndex) {
+      const { info, results } = response.data;
+
+      dispatch(updatePagination({ totalPages: info.pages }));
+      dispatch(addCharacters({ list: results, pageIndex }));
+      setPageContent({ ...pageContent, characters: results })
+    }
+
+    fetchCharactersData(1, successCallback);
   }, []);
 
   useEffect(function () {
@@ -207,13 +212,12 @@ const Homepage = () => {
     dispatch(updatePagination({ currentPage: key }));
     retrieveData('characters', key, state);
   }
-  /* new */
 
   return (
     <>
       <h1>Rick & Morty Characters</h1>
       <main>
-        <Pagination content={pageContent} updateContent={(key) => updateContent(key)} render={content => (<CharactersList characters={content} />)} />
+        <Pagination content={pageContent} updateContent={(key) => updateContent(key)} totalPages={totalPages} render={content => (<CharactersList characters={content} />)} />
       </main>
     </>
   );
