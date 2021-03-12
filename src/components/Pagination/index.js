@@ -16,7 +16,7 @@ const Pagination = ({ content, updateContent, totalPages = 20, render }) => {
 
   return (
     <div className="pagination">
-      {render(content.characters)}
+      {render(content)}
 
       <ButtonGroup settings={{ currentPage, totalPages, amountToShow: 3, showStartButton: true, showEndButton: true }} updateCurrentPage={updateCurrentPageData} />
     </div>
