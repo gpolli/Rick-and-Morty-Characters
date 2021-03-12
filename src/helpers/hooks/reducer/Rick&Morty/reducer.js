@@ -5,8 +5,7 @@ import { groupListByPageIndex, groupObjectByProperty, getSortedListOfObject, joi
 export const initialState = {
   pagination: {
     currentPage: 1,
-    pages: 0,
-    apiEndpoint: "https://rickandmortyapi.com/api/character",
+    totalPages: 0,
   },
   characters: {},
   locations: {},
