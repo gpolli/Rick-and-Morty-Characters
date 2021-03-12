@@ -11,59 +11,209 @@ import { objectIsEmpty, removeDuplicatesFromList, handleAPIRequest } from '../..
 const Homepage = () => {
   const state = useGlobal();
   const dispatch = useGlobalUpdater();
-  const { pagination, characters, locations } = state;
-  const { currentPage, pages, apiEndpoint } = pagination;
-  const { updatePagination, addCharacters, addLocations } = actions;
+  const { currentPage } = state.pagination;
+  const { updatePagination, addCharacters, addLocations, addEpisodes } = actions;
+  const [pageContent, setPageContent] = useState({ characters: [] });
 
-  function updateLocations(response) {
-    dispatch(addLocations(response));
+  /* new */
+  const formatResponse = (response) => {
+    if (Array.isArray(response)) return response;
+
+    if (response.hasOwnProperty('info')) {
+      return response.results;
+    }
+
+    return [response]
   }
 
-  const removeLocationsAlreadyStored = (list, storedLocations) => {
-    console.log('location already stored: ', list, storedLocations);
+  function fetchCharactersData(pageIndex, successCallback) {
+    const query = pageIndex ? `?page=${pageIndex}` : '';
 
-    return list.filter(item => !Object.values(storedLocations).some(location => location.id === Number(item)));
+    const callbacks = {
+      200: function (response) {
+        successCallback(response, pageIndex);
+      },
+      404: function (response) { },
+      500: function (response) { },
+      default: function (response) { },
+    }
+
+    handleAPIRequest({
+      method: 'GET',
+      url: `https://rickandmortyapi.com/api/character${query}`
+    }, callbacks);
+  }
+
+  function fetchLocationsData(locationsIndexes, successCallback) {
+    const query = locationsIndexes ? `/${locationsIndexes}` : '';
+
+    const callbacks = {
+      200: function (response) {
+        successCallback(response.data);
+      },
+      404: function (response) { },
+      500: function (response) { },
+      default: function (response) { },
+    }
+
+    handleAPIRequest({
+      method: 'GET',
+      url: `https://rickandmortyapi.com/api/location${query}`
+    }, callbacks);
+  }
+
+  function fetchEpisodesData(episodesIndexes, successCallback) {
+    const query = episodesIndexes ? `/${episodesIndexes}` : '';
+
+    const callbacks = {
+      200: function (response) {
+        successCallback(response.data);
+      },
+      404: function (response) { },
+      500: function (response) { },
+      default: function (response) { },
+    }
+
+    handleAPIRequest({
+      method: 'GET',
+      url: `https://rickandmortyapi.com/api/episode${query}`
+    }, callbacks);
+  }
+
+  const getDataIndexesToRetrieve = (type, key, store) => {
+    const regex = /[0-9]+/;
+    const pageCharacters = store['characters'][key];
+    const dataIndexes = { stored: [], toRequire: [] };
+
+    switch (type) {
+      case 'location':
+      case 'origin': {
+        if (pageCharacters) {
+          const pageCharactersWithUrl = pageCharacters.filter(character => character[type]['url']);
+          const dataIndexesList = pageCharactersWithUrl.map(character => character[type]['url'].match(regex)[0]);
+          const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
+
+          dataIndexesListWithoutDuplicates.forEach(index => {
+            if (Object.values(store['locations']).some(location => location.id === Number(index))) {
+              dataIndexes['stored'].push(index);
+            } else {
+              dataIndexes['toRequire'].push(index);
+            }
+          });
+        }
+
+        // dataIndexesNotAlreadyStored = dataIndexesListWithoutDuplicates.filter(index => !Object.values(store['locations']).some(location => location.id === Number(index)));
+        break;
+      }
+      case 'episode': {
+        const pageCharactersWithUrl = pageCharacters.filter(character => character[type].length);
+        const episodesUrlList = pageCharactersWithUrl.reduce((accumulator, currentValue) => {
+          return [...accumulator, ...currentValue[type]]
+        }, []);
+        const dataIndexesList = episodesUrlList.map(url => url.match(regex)[0]);
+        const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
+
+        dataIndexesListWithoutDuplicates.forEach(index => {
+          if (Object.values(store['episodes']).some(episode => episode.id === Number(index))) {
+            dataIndexes['stored'].push(index);
+          } else {
+            dataIndexes['toRequire'].push(index);
+          }
+        });
+
+        // dataIndexesNotAlreadyStored = dataIndexesListWithoutDuplicates.filter(index => !Object.values(store['episodes']).some(episode => episode.id === Number(index)));
+        break;
+      }
+      default:
+    }
+
+    return dataIndexes;
+  }
+
+  function retrieveData(type, key, store) {
+    switch (type) {
+      case 'characters':
+        if (Object.keys(store['characters']).some(storedKey => storedKey === String(key))) {
+          setPageContent({ ...pageContent, characters: store['characters'][key] });
+        } else {
+          const successCallback = function (response, pageIndex) {
+            const { info, results } = response.data;
+
+            dispatch(addCharacters({ list: results, pageIndex }));
+            setPageContent({ ...pageContent, characters: results })
+          }
+
+          fetchCharactersData(key, successCallback);
+        }
+        break;
+      case 'locations': {
+        const originsDataIndexes = getDataIndexesToRetrieve('origin', key, store);
+        const locationsDataIndexes = getDataIndexesToRetrieve('location', key, store);
+
+        const mergedDataIndexedStored = removeDuplicatesFromList([...originsDataIndexes['stored'], ...locationsDataIndexes['stored']]);
+        const mergedDataIndexedToRequire = removeDuplicatesFromList([...originsDataIndexes['toRequire'], ...locationsDataIndexes['toRequire']]).join();
+
+        const storedData = mergedDataIndexedStored.map(index => Object.values(store['locations']).filter(location => location.id === Number(index))[0]);
+
+        if (mergedDataIndexedToRequire) {
+          const successCallback = function (response) {
+            response = formatResponse(response);
+
+            dispatch(addLocations(response));
+            setPageContent({ ...pageContent, locations: [...storedData, ...response] })
+          }
+
+          fetchLocationsData(mergedDataIndexedToRequire, successCallback);
+        } else {
+          setPageContent({ ...pageContent, locations: storedData })
+        }
+
+        break;
+      }
+      case 'episodes':
+        const dataIndexes = getDataIndexesToRetrieve('episode', key, store);
+        const storedData = dataIndexes['stored'].map(index => Object.values(store['episodes']).filter(episode => episode.id === Number(index))[0]);
+
+        if (dataIndexes['toRequire'].join()) {
+          const successCallback = function (response) {
+            response = formatResponse(response);
+
+            dispatch(addEpisodes(response));
+            setPageContent({ ...pageContent, episodes: [...storedData, ...response] })
+          }
+
+          fetchEpisodesData(dataIndexes['toRequire'], successCallback);
+        } else {
+          setPageContent({ ...pageContent, episodes: storedData })
+        }
+
+        break;
+      default:
+    }
   }
 
   useEffect(function () {
-    const getInitialData = async function () {
-      const response = await fetch(`${apiEndpoint}?page=${currentPage}`);
-      const json = await response.json();
-      const { info, results } = json;
-
-      dispatch(addCharacters({ list: results, pageIndex: currentPage }));
-      dispatch(updatePagination({ pages: info.pages }));
-    }
-
-    getInitialData();
+    updateContent(1);
   }, []);
 
   useEffect(function () {
-    const regex = /[0-9]+/;
-
-    if (!objectIsEmpty(characters) && characters[String(currentPage)].length) {
-      const locationsIndex = removeLocationsAlreadyStored(removeDuplicatesFromList(characters[currentPage].filter(character => character.location.url).map(character => {
-        return character.location.url.match(regex)[0];
-      })), locations).join();
-
-      if (locationsIndex) {
-        handleAPIRequest(`https://rickandmortyapi.com/api/location/${locationsIndex}`, updateLocations);
-      }
+    if (pageContent.characters.length) {
+      retrieveData('locations', currentPage, state);
+      retrieveData('episodes', currentPage, state);
     }
-  }, [pagination]);
+  }, [pageContent.characters]);
 
-  // Per controllo
-  useEffect(function () {
-    console.log(characters);
-  }, [characters]);
+  function updateContent(key) {
+    dispatch(updatePagination({ currentPage: key }));
+    retrieveData('characters', key, state);
+  }
+  /* new */
 
   return (
     <>
       <h1>Rick & Morty Characters</h1>
       <main>
-        <Pagination>
-          <CharactersList characters={characters[currentPage]} />
-        </Pagination>
+        <Pagination content={pageContent} updateContent={(key) => updateContent(key)} render={content => (<CharactersList characters={content} />)} />
       </main>
     </>
   );

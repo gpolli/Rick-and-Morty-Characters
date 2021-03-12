@@ -32,7 +32,7 @@ export const reducer = (state, action) => {
       }
     }
     case ACTION_TYPES.ADD_LOCATIONS: {
-      const objectToJoin = joinObjectsFromList(action.payload.map(location => groupObjectByProperty(location, location.name)))
+      const objectToJoin = joinObjectsFromList(action.payload.map(location => groupObjectByProperty(location, location.name)));
       const newLocations = { ...state.locations, ...objectToJoin };
 
       return {
@@ -41,7 +41,8 @@ export const reducer = (state, action) => {
       }
     }
     case ACTION_TYPES.ADD_EPISODES:
-      const newEpisodes = { ...state.episodes, ...action.payload };
+      const objectToJoin = joinObjectsFromList(action.payload.map(episode => groupObjectByProperty(episode, episode.id)))
+      const newEpisodes = { ...state.episodes, ...objectToJoin };
 
       return {
         ...state,

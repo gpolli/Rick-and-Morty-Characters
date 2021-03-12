@@ -7,33 +7,18 @@ import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Style */
 import './style.css';
 
-const Pagination = ({ children }) => {
-  const state = useGlobal();
-  const dispatch = useGlobalUpdater();
-  const { pagination, characters } = state;
-  const { currentPage, pages, apiEndpoint } = pagination;
-  const { updatePagination, addCharacters } = actions;
-
-  async function getPageData(pageIndex) {
-    const response = await fetch(`${apiEndpoint}?page=${pageIndex}`);
-    const json = await response.json();
-    const { results } = json;
-
-    dispatch(addCharacters({ list: results, pageIndex }));
-    dispatch(updatePagination({ currentPage: pageIndex }));
-  }
+const Pagination = ({ content, updateContent, render }) => {
+  const [pagination, setPagination] = useState({ currentPage: 1, pages: 20 });
+  const { currentPage, pages } = pagination;
 
   function updateCurrentPageData(pageIndex) {
-    if (Object.keys(characters).some(storedPage => storedPage === String(pageIndex))) {
-      dispatch(updatePagination({ currentPage: pageIndex }))
-    } else {
-      getPageData(pageIndex);
-    }
+    updateContent(pageIndex);
+    setPagination({ ...pagination, currentPage: pageIndex });
   }
 
   return (
     <div className="pagination">
-      {children}
+      {render(content.characters)}
       <section className="pagination__buttons-wrapper">
         {currentPage !== 1 ? (<Button className="pagination__button" text={currentPage - 1} clickEvent={() => updateCurrentPageData(currentPage - 1)} />) : null}
         <Button className="pagination__button" text={currentPage} disabled={true} />
