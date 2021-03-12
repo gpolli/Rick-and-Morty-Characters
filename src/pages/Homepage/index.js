@@ -6,7 +6,7 @@ import CharactersList from '../../components/CharactersList';
 import { useGlobal, useGlobalUpdater } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
 import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Helpers */
-import { removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
+import { objectIsEmpty, removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
 
 const Homepage = () => {
   const state = useGlobal();
@@ -131,13 +131,13 @@ const Homepage = () => {
     switch (type) {
       case 'characters':
         if (Object.keys(store['characters']).some(storedKey => storedKey === String(key))) {
-          setPageContent({ ...pageContent, characters: store['characters'][key] });
+          setPageContent({ characters: store['characters'][key] });
         } else {
           const successCallback = function (response, pageIndex) {
             const { results } = response.data;
 
             dispatch(addCharacters({ list: results, pageIndex }));
-            setPageContent({ ...pageContent, characters: results })
+            setPageContent({ characters: results })
           }
 
           fetchCharactersData(key, successCallback);
@@ -157,12 +157,12 @@ const Homepage = () => {
             response = formatResponse(response);
 
             dispatch(addLocations(response));
-            setPageContent({ ...pageContent, locations: joinObjectsFromList([...storedData, ...response].map(location => groupObjectByProperty(location, location.name))) })
+            setPageContent({ ...pageContent, locations: joinObjectsFromList([...storedData, ...response].map(location => groupObjectByProperty(location, location.name))) });
           }
 
           fetchLocationsData(mergedDataIndexedToRequire, successCallback);
         } else {
-          setPageContent({ ...pageContent, locations: joinObjectsFromList(storedData.map(location => groupObjectByProperty(location, location.name))) })
+          setPageContent({ ...pageContent, locations: joinObjectsFromList(storedData.map(location => groupObjectByProperty(location, location.name))) });
         }
 
         break;
@@ -176,7 +176,7 @@ const Homepage = () => {
             response = formatResponse(response);
 
             dispatch(addEpisodes(response));
-            setPageContent({ ...pageContent, episodes: joinObjectsFromList([...storedData, ...response].map(episode => groupObjectByProperty(episode, episode.id))) })
+            setPageContent({ ...pageContent, episodes: joinObjectsFromList([...storedData, ...response].map(episode => groupObjectByProperty(episode, episode.id))) });
           }
 
           fetchEpisodesData(dataIndexes['toRequire'], successCallback);
@@ -204,14 +204,30 @@ const Homepage = () => {
   useEffect(function () {
     if (pageContent.characters.length) {
       retrieveData('locations', currentPage, state);
-      retrieveData('episodes', currentPage, state);
     }
   }, [pageContent.characters]);
+
+  useEffect(function () {
+    if (pageContent.characters.length && pageContent.locations) {
+      retrieveData('episodes', currentPage, state);
+    }
+  }, [pageContent.locations]);
 
   function updateContent(key) {
     dispatch(updatePagination({ currentPage: key }));
     retrieveData('characters', key, state);
   }
+
+  // test
+  // useEffect(function () {
+  //   console.log('characters: ', pageContent);
+  // }, [pageContent.characters]);
+  // useEffect(function () {
+  //   console.log('locations: ', pageContent);
+  // }, [pageContent.locations]);
+  // useEffect(function () {
+  //   console.log('episodes: ', pageContent);
+  // }, [pageContent.episodes]);
 
   return (
     <>
