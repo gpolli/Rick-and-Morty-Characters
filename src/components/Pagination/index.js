@@ -4,7 +4,7 @@ import ButtonGroup from '../ButtonGroup';
 /* Style */
 import './style.css';
 
-const Pagination = ({ content, updateContent, totalPages = 20, styleModifiers, buttonGroupSettings, render }) => {
+const Pagination = ({ content, updateContent, totalPages = 20, parentClass = "", styleModifiers, buttonGroupSettings, render }) => {
   const [pagination, setPagination] = useState({ currentPage: 1, pages: totalPages });
   const { currentPage, pages } = pagination;
 
@@ -18,7 +18,7 @@ const Pagination = ({ content, updateContent, totalPages = 20, styleModifiers, b
   }, [content]);
 
   return (
-    <div className={`pagination ${styleModifiers?.reverseContentOrder ? 'pagination--reverse-content-order' : ''}`}>
+    <div className={`${parentClass} pagination ${styleModifiers?.reverseContentOrder ? 'pagination--reverse-content-order' : ''}`}>
       {render(content)}
 
       <ButtonGroup parentClass="pagination__button-group" settings={{ currentPage, totalPages, ...buttonGroupSettings }} updateCurrentPage={updateCurrentPageData} />

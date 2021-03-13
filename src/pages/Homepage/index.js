@@ -4,6 +4,7 @@ import logo from '../../assets/images/rick_morty_logo.png';
 /* Components */
 import Pagination from '../../components/Pagination';
 import CharactersList from '../../components/CharactersList';
+import Footer from '../../components/Footer';
 /* Custom Hooks */
 import { useGlobal, useGlobalUpdater } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
 import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
@@ -257,9 +258,11 @@ const Homepage = () => {
           content={pageContent}
           updateContent={(key) => updateContent(key)}
           totalPages={totalPages}
+          parentClass="homepage__pagination"
           buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true, styleModifiers: { size: 'big', buttonWidth: 'fixed' } }}
           render={content => (<CharactersList parentClass="pagination__content" content={content} />)} />
       </main>
+      <Footer />
     </>
   );
 }

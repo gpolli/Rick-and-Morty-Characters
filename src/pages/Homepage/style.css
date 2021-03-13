@@ -10,7 +10,19 @@
   background-position: center top;
 }
 
+@media (min-width: 2200px) {
+  .homepage {
+    background-image: none;
+  }
+}
+
 .homepage__logo {
   width: 90vw;
-  padding: 0 1rem 2rem;
+  padding: 0 1rem 2rem 1rem;
+}
+
+@media (min-width: 1920px) {
+  .homepage__logo {
+    padding: 0 1rem 2rem 3rem;
+  }
 }

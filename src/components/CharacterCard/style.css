@@ -12,6 +12,40 @@
   box-shadow: 0 0 2px 5px #fab999;
 }
 
+@media (min-width: 768px) {
+  .character-card {
+    width: 55vw;
+  }
+}
+
+/* @media (min-width: 992) { */
+/* @media (min-width: 1200px) { */
+/* @media (min-width: 1440px) {
+  .character-card {
+    width: 40vw;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+} */
+
+@media (min-width: 1024px) {
+  .character-card {
+    width: 38vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .character-card {
+    width: 30vw;
+  }
+}
+
+@media (min-width: 1920px) {
+  .character-card {
+    width: 20vw;
+  }
+}
+
 .character-card__image {
   width: 175px;
   height: 175px;

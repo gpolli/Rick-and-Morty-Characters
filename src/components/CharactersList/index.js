@@ -118,7 +118,7 @@ const CharactersList = ({ parentClass, content = { characters: [], location: [],
   }
 
   return (
-    <section className={`${parentClass ? parentClass : ''}`}>
+    <section className={`${parentClass ? parentClass : ''} character-list`}>
       {
         characters.length
           ? characters.map(character => (<CharacterCard character={character} content={setCardContent(character, content)} parentClass="characters-list__character-item" />))
