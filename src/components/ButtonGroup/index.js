@@ -7,7 +7,7 @@ import Button from '../Button';
 import './style.css';
 
 const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent }) => {
-  const { currentPage, totalPages, labels, amountToShow, showStartButton, showEndButton, styleModifiers } = settings;
+  const { currentPage, totalPages, labels, amountToShow, showStartButton, showEndButton, reinitOnContentUpdate, styleModifiers } = settings;
   // const { position, size, shape } = styleModifiers;
   const [buttons, setButtons] = useState([]);
 
@@ -60,6 +60,12 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent
       renderButtons(currentPage, totalPages, amountToShow);
     }
   }, [updatingContent]);
+
+  useEffect(function () {
+    if (reinitOnContentUpdate) {
+      updateCurrentPage(1);
+    }
+  }, [labels]);
 
   return (
     <section className={`${parentClass ? parentClass : ''} button-group ${styleModifiers?.size ? (`button-group--${styleModifiers.size}`) : ''} ${styleModifiers?.buttonWidth ? (`button-group--button-width-${styleModifiers.buttonWidth}`) : ''}`}>
