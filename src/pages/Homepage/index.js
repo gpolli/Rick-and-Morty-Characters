@@ -262,7 +262,7 @@ const Homepage = () => {
           updatingContent={updatingContent}
           totalPages={totalPages}
           parentClass="homepage__pagination"
-          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true, styleModifiers: { size: 'big', buttonWidth: 'fixed' } }}
+          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true, reinitOnContentUpdate: false, styleModifiers: { size: 'big', buttonWidth: 'fixed' } }}
           render={content => (<CharactersList parentClass="pagination__content" content={content} />)} />
       </main>
       <Footer />

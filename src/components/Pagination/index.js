@@ -9,8 +9,6 @@ const Pagination = ({ content, updateContent, updatingContent, totalPages = 20, 
   const { currentPage, pages } = pagination;
 
   function updateCurrentPageData(pageIndex) {
-    console.log('pagination state: ', updatingContent);
-
     if (!updatingContent) {
       updateContent(pageIndex);
       setPagination({ ...pagination, currentPage: pageIndex });
