@@ -39,11 +39,11 @@ const CharactersList = ({ parentClass, content = { characters: [], location: [],
 
       return {
         static: {
-          image
+          image,
+          name,
         },
         dynamic: {
           profile: {
-            name,
             status,
             species,
             type,
@@ -71,11 +71,11 @@ const CharactersList = ({ parentClass, content = { characters: [], location: [],
 
       return {
         static: {
-          image
+          image,
+          name,
         },
         dynamic: {
           profile: {
-            name,
             status,
             species,
             type,
@@ -100,11 +100,11 @@ const CharactersList = ({ parentClass, content = { characters: [], location: [],
 
     return {
       static: {
-        image
+        image,
+        name,
       },
       dynamic: {
         profile: {
-          name,
           status,
           species,
           type,

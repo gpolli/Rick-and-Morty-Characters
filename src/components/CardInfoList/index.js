@@ -28,7 +28,7 @@ const CardInfoList = ({ parentClass, content }) => {
           <div className={`${parentClass ? parentClass : ''} card-info-list`}>
             {
               content[key].map(element => {
-                return (<InfoRow label='episode' value={`${element['episode']} - ${element['name']}`} />);
+                return (<InfoRow value={`${element['episode']} - ${element['name']}`} />);
               })
             }
           </div>

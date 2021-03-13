@@ -1,9 +1,13 @@
 .card-info-list {
   /* width: 400px; */
-  height: 200px;
+  width: calc(90% + 10px);
+  max-height: 150px; /* solo per mobile */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  border: 1px solid black;
+  justify-content: flex-start;
+  /* padding: 0.5rem; */
+  /* border: 1px solid black; */
+  /* border: 2px solid rgb(4,30,44); */
+  border-radius: 5px;
   overflow: auto;
 }

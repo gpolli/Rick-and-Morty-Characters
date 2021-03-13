@@ -10,7 +10,7 @@ import { objectIsEmpty } from '../../helpers/utils';
 import './style.css';
 
 const CharacterCard = ({ content, character, parentClass }) => {
-  const { name, image, } = character;
+  const { name, image } = character;
   const [cardContent, setCardContent] = useState({});
   const [paginationLabels, setPaginationLabels] = useState({});
 
@@ -50,14 +50,17 @@ const CharacterCard = ({ content, character, parentClass }) => {
     <div className={`${parentClass} character-card`}>
       <img className="character-card__image" src={image} alt={name} />
 
-      <Pagination
-        content={cardContent}
-        updateContent={key => updateContent(key)}
-        totalPages={Object.keys(content['dynamic']).length}
-        styleModifiers={{ reverseContentOrder: true }}
-        buttonGroupSettings={{ labels: paginationLabels, amountToShow: 4, showStartButton: false, showEndButton: false }}
-        render={(content) => (<CardInfoList parentClass="pagination__content" content={content} />)}
-      />
+      <section className="character-card__info-wrapper">
+        <h3 className="character-card__name">{name}</h3>
+        <Pagination
+          content={cardContent}
+          updateContent={key => updateContent(key)}
+          totalPages={Object.keys(content['dynamic']).length}
+          styleModifiers={{ reverseContentOrder: true }}
+          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 4, showStartButton: false, showEndButton: false }}
+          render={(content) => (<CardInfoList parentClass="pagination__content" content={content} />)}
+        />
+      </section>
     </div>
   );
 }
