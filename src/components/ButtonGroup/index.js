@@ -36,15 +36,15 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent
       }
 
       for (let i = leftLimit; i <= rightLimit; i++) {
-        buttons.push(<Button className={`${i === currentPage ? "button--is-active" : ""}`} text={labels[i]} clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () { }} />);
+        buttons.push(<Button className={`${i === currentPage ? "button--is-active" : ""}`} text={labels[i]} clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () { }} key={i} />);
       }
 
       if (showStartButton) {
-        buttons.unshift(<Button disabled={currentPage === 1} clickEvent={() => updateCurrentPage(1)}><img className="button__icon button__icon--reverse-direction" src={double_chevron} alt="Double chevron left" /></Button>);
+        buttons.unshift(<Button disabled={currentPage === 1} clickEvent={() => updateCurrentPage(1)} key={0}><img className="button__icon button__icon--reverse-direction" src={double_chevron} alt="Double chevron left" /></Button>);
       }
 
       if (showEndButton) {
-        buttons.push(<Button disabled={currentPage === totalPages} clickEvent={() => updateCurrentPage(totalPages)}><img className="button__icon" src={double_chevron} alt="Double chevron right" /></Button>);
+        buttons.push(<Button disabled={currentPage === totalPages} clickEvent={() => updateCurrentPage(totalPages)} key={totalPages + 1}><img className="button__icon" src={double_chevron} alt="Double chevron right" /></Button>);
       }
 
       setButtons(buttons);

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 /* Components */
 import Pagination from '../Pagination';
 import CardInfoList from '../CardInfoList';
-/* Custom Hooks */
-import { useGlobal } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
 /* Helpers */
 import { objectIsEmpty } from '../../helpers/utils';
 /* Style */

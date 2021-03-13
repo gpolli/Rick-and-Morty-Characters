@@ -1,6 +1,6 @@
 import { ACTION_TYPES } from './actionTypes';
 /* Helpers */
-import { groupListByPageIndex, groupObjectByProperty, getSortedListOfObject, joinObjectsFromList } from '../../../utils';
+import { groupListByPageIndex, groupObjectByProperty, joinObjectsFromList } from '../../../utils';
 
 export const initialState = {
   pagination: {
