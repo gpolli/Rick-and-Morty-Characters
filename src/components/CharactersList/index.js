@@ -87,7 +87,7 @@ const CharactersList = ({ parentClass, content = { characters: [], location: [],
     <section className={`${parentClass ? parentClass : ''} character-list`}>
       {
         characters.length
-          ? characters.map(character => (<CharacterCard character={character} content={setCardContent(character, content)} parentClass="characters-list__character-item" />))
+          ? characters.map((character, index) => (<CharacterCard character={character} content={setCardContent(character, content)} parentClass="characters-list__character-item" key={index} />))
           : "No characters found"
       }
     </section>

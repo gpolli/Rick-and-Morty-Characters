@@ -6,7 +6,7 @@ import './style.css';
 
 const Pagination = ({ content, updateContent, updatingContent, totalPages = 20, parentClass = "", styleModifiers, buttonGroupSettings, render }) => {
   const [pagination, setPagination] = useState({ currentPage: 1, pages: totalPages });
-  const { currentPage, pages } = pagination;
+  const { currentPage } = pagination;
 
   function updateCurrentPageData(pageIndex) {
     if (!updatingContent) {

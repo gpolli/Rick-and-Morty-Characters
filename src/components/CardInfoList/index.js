@@ -17,8 +17,8 @@ const CardInfoList = ({ parentClass, content }) => {
         return (
           <div className={`${parentClass ? parentClass : ''} card-info-list`}>
             {
-              Object.keys(content[key]).map((label) => {
-                return (<InfoRow label={label} value={content[key][label]} />);
+              Object.keys(content[key]).map((label, index) => {
+                return (<InfoRow label={label} value={content[key][label]} key={index} />);
               })
             }
           </div>
@@ -27,8 +27,8 @@ const CardInfoList = ({ parentClass, content }) => {
         return (
           <div className={`${parentClass ? parentClass : ''} card-info-list`}>
             {
-              content[key].map(element => {
-                return (<InfoRow value={`${element['episode']} - ${element['name']}`} />);
+              content[key].map((element, index) => {
+                return (<InfoRow value={`${element['episode']} - ${element['name']}`} key={index} />);
               })
             }
           </div>
