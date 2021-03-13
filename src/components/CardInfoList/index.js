@@ -6,7 +6,7 @@ import { objectIsEmpty } from '../../helpers/utils';
 /* Style */
 import './style.css';
 
-const CardInfoList = ({ content }) => {
+const CardInfoList = ({ parentClass, content }) => {
   if (!objectIsEmpty(content)) {
     const key = Object.keys(content)[0];
 
@@ -15,7 +15,7 @@ const CardInfoList = ({ content }) => {
       case 'origin':
       case 'location':
         return (
-          <div className="card-info-list">
+          <div className={`${parentClass ? parentClass : ''} card-info-list`}>
             {
               Object.keys(content[key]).map((label) => {
                 return (<InfoRow label={label} value={content[key][label]} />);
@@ -25,7 +25,7 @@ const CardInfoList = ({ content }) => {
         );
       case 'episodes':
         return (
-          <div className="card-info-list">
+          <div className={`${parentClass ? parentClass : ''} card-info-list`}>
             {
               content[key].map(element => {
                 return (<InfoRow label='episode' value={`${element['episode']} - ${element['name']}`} />);
@@ -34,11 +34,11 @@ const CardInfoList = ({ content }) => {
           </div>
         );
       default:
-        return (<div>No content available</div>);
+        return (<div className={`${parentClass ? parentClass : ''} card-info-list`}>No content available</div>);
     }
   }
 
-  return (<div>No content available</div>);
+  return (<div className={`${parentClass ? parentClass : ''} card-info-list`}>No content available</div>);
 }
 
 export default CardInfoList;

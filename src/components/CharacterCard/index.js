@@ -54,8 +54,9 @@ const CharacterCard = ({ content, character, parentClass }) => {
         content={cardContent}
         updateContent={key => updateContent(key)}
         totalPages={Object.keys(content['dynamic']).length}
+        styleModifiers={{ reverseContentOrder: true }}
         buttonGroupSettings={{ labels: paginationLabels, amountToShow: 4, showStartButton: false, showEndButton: false }}
-        render={(content) => (<CardInfoList content={content} />)}
+        render={(content) => (<CardInfoList parentClass="pagination__content" content={content} />)}
       />
     </div>
   );

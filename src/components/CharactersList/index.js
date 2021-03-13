@@ -6,7 +6,7 @@ import { objectIsEmpty } from '../../helpers/utils';
 /* Style */
 import './style.css';
 
-const CharactersList = ({ content = { characters: [], location: [], episodes: [] } }) => {
+const CharactersList = ({ parentClass, content = { characters: [], location: [], episodes: [] } }) => {
   const { characters } = content;
 
   const getEpisodesIndexes = (episodes) => {
@@ -118,7 +118,7 @@ const CharactersList = ({ content = { characters: [], location: [], episodes: []
   }
 
   return (
-    <section>
+    <section className={`${parentClass ? parentClass : ''}`}>
       {
         characters.length
           ? characters.map(character => (<CharacterCard character={character} content={setCardContent(character, content)} parentClass="characters-list__character-item" />))

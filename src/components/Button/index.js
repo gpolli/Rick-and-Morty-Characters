@@ -1,8 +1,12 @@
 import React from 'react';
+/* Style */
+import './style.css';
 
-const Button = ({ className = "", type = "button", text = "", clickEvent = function () { }, disabled = false }) => {
+const Button = ({ className = "", type = "button", text = "", clickEvent = function () { }, disabled = false, children }) => {
   return (
-    <button className={className} type={type} onClick={clickEvent} disabled={disabled}>{text}</button>
+    <button className={`button ${className}`} type={type} onClick={clickEvent} disabled={disabled}>
+      {text}{children}
+    </button>
   );
 }
 

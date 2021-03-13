@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
+/* Assets */
+import double_chevron from '../../assets/images/double_chevron.png';
 /* Components */
 import Button from '../Button';
+/* Style */
+import './style.css';
 
-const ButtonGroup = ({ settings, updateCurrentPage }) => {
-  const { currentPage, totalPages, labels, amountToShow, showStartButton, showEndButton } = settings;
+const ButtonGroup = ({ parentClass, settings, updateCurrentPage }) => {
+  const { currentPage, totalPages, labels, amountToShow, showStartButton, showEndButton, styleModifiers } = settings;
+  // const { position, size, shape } = styleModifiers;
   const [buttons, setButtons] = useState([]);
 
   function renderButtons(currentPage, totalPages, amountToShow) {
@@ -31,15 +36,15 @@ const ButtonGroup = ({ settings, updateCurrentPage }) => {
       }
 
       for (let i = leftLimit; i <= rightLimit; i++) {
-        buttons.push(<Button className={`pagination__button ${i === currentPage ? "pagination__button--is-active" : ""}`} text={labels[i]} clickEvent={() => updateCurrentPage(i)} />);
+        buttons.push(<Button className={`${i === currentPage ? "button--is-active" : ""}`} text={labels[i]} clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () { }} />);
       }
 
-      if (currentPage !== 1 && showStartButton) {
-        buttons.unshift(<Button className={`pagination__button`} text="Start" clickEvent={() => updateCurrentPage(1)} />);
+      if (showStartButton) {
+        buttons.unshift(<Button disabled={currentPage === 1} clickEvent={() => updateCurrentPage(1)}><img className="button__icon button__icon--reverse-direction" src={double_chevron} alt="Double chevron left" /></Button>);
       }
 
-      if (currentPage !== totalPages && showEndButton) {
-        buttons.push(<Button className={`pagination__button`} text="End" clickEvent={() => updateCurrentPage(totalPages)} />);
+      if (showEndButton) {
+        buttons.push(<Button disabled={currentPage === totalPages} clickEvent={() => updateCurrentPage(totalPages)}><img className="button__icon" src={double_chevron} alt="Double chevron right" /></Button>);
       }
 
       setButtons(buttons);
@@ -51,7 +56,7 @@ const ButtonGroup = ({ settings, updateCurrentPage }) => {
   }, [currentPage, totalPages, labels])
 
   return (
-    <section>
+    <section className={`${parentClass ? parentClass : ''} button-group ${styleModifiers?.size ? (`button-group--${styleModifiers.size}`) : ''} ${styleModifiers?.buttonWidth ? (`button-group--button-width-${styleModifiers.buttonWidth}`) : ''}`}>
       {buttons}
     </section>
   );

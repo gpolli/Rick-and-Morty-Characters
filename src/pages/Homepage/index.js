@@ -257,8 +257,8 @@ const Homepage = () => {
           content={pageContent}
           updateContent={(key) => updateContent(key)}
           totalPages={totalPages}
-          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true }}
-          render={content => (<CharactersList content={content} />)} />
+          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true, styleModifiers: { size: 'big', buttonWidth: 'fixed' } }}
+          render={content => (<CharactersList parentClass="pagination__content" content={content} />)} />
       </main>
     </>
   );
