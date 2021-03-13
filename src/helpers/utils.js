@@ -8,6 +8,10 @@ export const objectIsEmpty = (object) => {
   return false;
 };
 
+export const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export const removeDuplicatesFromList = (list) => {
   return list.filter((item, currentIndex) => list.indexOf(item) === currentIndex);
 }
