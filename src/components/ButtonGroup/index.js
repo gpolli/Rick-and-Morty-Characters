@@ -6,7 +6,7 @@ import Button from '../Button';
 /* Style */
 import './style.css';
 
-const ButtonGroup = ({ parentClass, settings, updateCurrentPage }) => {
+const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent }) => {
   const { currentPage, totalPages, labels, amountToShow, showStartButton, showEndButton, styleModifiers } = settings;
   // const { position, size, shape } = styleModifiers;
   const [buttons, setButtons] = useState([]);
@@ -54,6 +54,12 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage }) => {
   useEffect(function () {
     renderButtons(currentPage, totalPages, amountToShow);
   }, [currentPage, totalPages, labels])
+
+  useEffect(function () {
+    if (!updatingContent) {
+      renderButtons(currentPage, totalPages, amountToShow);
+    }
+  }, [updatingContent]);
 
   return (
     <section className={`${parentClass ? parentClass : ''} button-group ${styleModifiers?.size ? (`button-group--${styleModifiers.size}`) : ''} ${styleModifiers?.buttonWidth ? (`button-group--button-width-${styleModifiers.buttonWidth}`) : ''}`}>
