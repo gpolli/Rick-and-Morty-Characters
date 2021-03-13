@@ -1,8 +1,13 @@
+/* Custom Hooks */
+import { GlobalProvider } from './helpers/hooks/context/Rick&Morty/GlobalContext';
+/* Pages */
+import Homepage from './pages/Homepage';
+
 function App() {
   return (
-    <div className="App">
-      App!
-    </div>
+    <GlobalProvider>
+      <Homepage />
+    </GlobalProvider>
   );
 }
 

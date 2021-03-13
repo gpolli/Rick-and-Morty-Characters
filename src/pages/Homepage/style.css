@@ -1,0 +1,28 @@
+.homepage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+  background-color: #3A3973;
+  background-image: url("../../assets/images/rick_morty_stars_background.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+@media (min-width: 2200px) {
+  .homepage {
+    background-image: none;
+  }
+}
+
+.homepage__logo {
+  width: 90vw;
+  padding: 0 1rem 2rem 1rem;
+}
+
+@media (min-width: 1920px) {
+  .homepage__logo {
+    padding: 0 1rem 2rem 3rem;
+  }
+}

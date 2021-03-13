@@ -1,0 +1,77 @@
+.button {
+  height: 40px;
+  margin: 5px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0.5rem;
+  background-color: rgb(28,165,191);
+  border: 2px solid rgb(4,30,44);
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  border-right-width: 1px;
+  border-left-width: 1px;
+  box-shadow: 0 0 2px 5px #7cfa45;
+  outline: none;
+}
+
+.button:hover,
+.button:focus,
+.button:visited {
+  outline: none;
+}
+
+.button:disabled {
+  opacity: 0.75;
+}
+
+.button--is-active {
+  background-color: #137385;
+}
+
+.button-group .button {
+  margin: 0;
+  box-shadow: none;
+}
+
+.button-group .button:first-child {
+  border-width: 2px;
+  border-right-width: 1px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.button-group .button:last-child {
+  border-width: 2px;
+  border-left-width: 1px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.button-group--big .button {
+  height: 50px;
+  font-size: 1rem;
+}
+
+.button-group--button-width-fixed .button {
+  width: 40px;
+}
+
+.button-group--big.button-group--button-width-fixed .button {
+  width: 50px;
+}
+
+.button__icon {
+  width: 12px;
+  height: 9px;
+}
+
+.button__icon--reverse-direction {
+  transform: rotate(180deg);
+}
+
+.button:disabled .button__icon {
+  opacity: 0.5;
+}

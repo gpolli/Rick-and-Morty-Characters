@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+  background-color: #3A3973;
+}
+
+.footer__text {
+  color: #ffffff;
+}
+
+.footer__owner-name {
+  font-weight: bold;
+  font-style: italic;
+}

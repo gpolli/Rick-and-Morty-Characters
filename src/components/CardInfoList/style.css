@@ -1,0 +1,17 @@
+.card-info-list {
+  /* width: calc(90% + 10px); */
+  width: 290px;
+  max-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+@media (min-width: 992px) {
+  .card-info-list {
+    height: 100px;
+    max-height: none;
+  }
+}
