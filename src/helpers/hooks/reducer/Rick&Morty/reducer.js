@@ -6,6 +6,7 @@ export const initialState = {
   pagination: {
     currentPage: 1,
     totalPages: 0,
+    updatingContent: false,
   },
   characters: {},
   locations: {},

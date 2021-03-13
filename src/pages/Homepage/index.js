@@ -9,14 +9,14 @@ import Footer from '../../components/Footer';
 import { useGlobal, useGlobalUpdater } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
 import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Helpers */
-import { objectIsEmpty, removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
+import { removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
 /* Style */
 import './style.css';
 
 const Homepage = () => {
   const state = useGlobal();
   const dispatch = useGlobalUpdater();
-  const { currentPage, totalPages } = state.pagination;
+  const { currentPage, totalPages, updatingContent } = state.pagination;
   const { updatePagination, addCharacters, addLocations, addEpisodes } = actions;
   const [pageContent, setPageContent] = useState({ characters: [] });
   const [paginationLabels, setPaginationLabels] = useState({});
@@ -193,11 +193,13 @@ const Homepage = () => {
 
             dispatch(addEpisodes(response));
             setPageContent({ ...pageContent, episodes: joinObjectsFromList([...storedData, ...response].map(episode => groupObjectByProperty(episode, episode.id))) });
+            dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
           }
 
           fetchEpisodesData(dataIndexes['toRequire'], successCallback);
         } else {
-          setPageContent({ ...pageContent, episodes: joinObjectsFromList(storedData.map(episode => groupObjectByProperty(episode, episode.id))) })
+          setPageContent({ ...pageContent, episodes: joinObjectsFromList(storedData.map(episode => groupObjectByProperty(episode, episode.id))) });
+          dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
         }
 
         break;
@@ -234,7 +236,7 @@ const Homepage = () => {
   }, [totalPages]);
 
   function updateContent(key) {
-    dispatch(updatePagination({ currentPage: key }));
+    dispatch(updatePagination({ currentPage: key, updatingContent: true }));
     retrieveData('characters', key, state);
   }
 
@@ -257,6 +259,7 @@ const Homepage = () => {
         <Pagination
           content={pageContent}
           updateContent={(key) => updateContent(key)}
+          updatingContent={updatingContent}
           totalPages={totalPages}
           parentClass="homepage__pagination"
           buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true, styleModifiers: { size: 'big', buttonWidth: 'fixed' } }}
