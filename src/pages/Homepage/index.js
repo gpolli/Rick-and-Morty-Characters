@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+/* Assets */
+import logo from '../../assets/images/rick_morty_logo.png';
 /* Components */
 import Pagination from '../../components/Pagination';
 import CharactersList from '../../components/CharactersList';
@@ -7,6 +9,8 @@ import { useGlobal, useGlobalUpdater } from '../../helpers/hooks/context/Rick&Mo
 import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Helpers */
 import { objectIsEmpty, removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
+/* Style */
+import './style.css';
 
 const Homepage = () => {
   const state = useGlobal();
@@ -247,8 +251,8 @@ const Homepage = () => {
 
   return (
     <>
-      <h1>Rick & Morty Characters</h1>
-      <main>
+      <main className="homepage">
+        <img className="homepage__logo" src={logo} alt="Rick&Morty logo" />
         <Pagination
           content={pageContent}
           updateContent={(key) => updateContent(key)}

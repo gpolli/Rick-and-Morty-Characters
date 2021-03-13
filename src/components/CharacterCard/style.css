@@ -1,15 +1,18 @@
 .character-card {
   width: 90vw;
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  padding: 2rem 1rem;
+  background-color: #ffffff;
   border: 2px solid black;
   border-radius: 10px;
 }
 
 .character-card__image {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
 }
 

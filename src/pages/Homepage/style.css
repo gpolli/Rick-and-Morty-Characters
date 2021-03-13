@@ -1,0 +1,14 @@
+.homepage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #3A3973;
+  background-image: url("../../assets/images/rick_morty_stars_background.png");
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+.homepage__logo {
+  width: 90vw;
+  padding: 2rem 1rem;
+}
