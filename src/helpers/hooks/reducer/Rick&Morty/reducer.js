@@ -3,6 +3,9 @@ import { ACTION_TYPES } from './actionTypes';
 import { groupListByPageIndex, groupObjectByProperty, joinObjectsFromList } from '../../../utils';
 
 export const initialState = {
+  overlay: {
+    isVisible: false,
+  },
   pagination: {
     currentPage: 1,
     totalPages: 0,
@@ -15,6 +18,13 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case ACTION_TYPES.UPDATE_OVERLAY:
+      const newOverlay = { ...state.overlay, ...action.payload };
+
+      return {
+        ...state,
+        overlay: newOverlay,
+      };
     case ACTION_TYPES.UPDATE_PAGINATION:
       const newPagination = { ...state.pagination, ...action.payload };
 
