@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 /* Components */
 import ButtonGroup from '../ButtonGroup';
 /* Style */
@@ -21,25 +21,13 @@ const Pagination = ({
     if (!updatingContent) {
       updateContent(pageIndex);
       setPagination({ ...pagination, currentPage: pageIndex });
-    } else {
-      console.log('updating content...');
     }
   }
 
-  useEffect(
-    function () {
-      if (!updatingContent) {
-        console.log('content update finished!');
-      }
-    },
-    [updatingContent],
-  );
-
   return (
     <div
-      className={`${parentClass} pagination ${
-        styleModifiers?.reverseContentOrder ? 'pagination--reverse-content-order' : ''
-      }`}
+      className={`${parentClass} pagination ${styleModifiers?.reverseContentOrder ? 'pagination--reverse-content-order' : ''
+        }`}
     >
       {render(content)}
 

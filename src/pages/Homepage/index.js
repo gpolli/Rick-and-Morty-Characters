@@ -56,9 +56,7 @@ const Homepage = () => {
       200: function (response) {
         successCallback(response, pageIndex);
       },
-      404: function (response) {},
-      500: function (response) {},
-      default: function (response) {},
+      default: function (response) { },
     };
 
     handleAPIRequest(
@@ -77,9 +75,7 @@ const Homepage = () => {
       200: function (response) {
         successCallback(response.data);
       },
-      404: function (response) {},
-      500: function (response) {},
-      default: function (response) {},
+      default: function (response) { },
     };
 
     handleAPIRequest(
@@ -98,9 +94,7 @@ const Homepage = () => {
       200: function (response) {
         successCallback(response.data);
       },
-      404: function (response) {},
-      500: function (response) {},
-      default: function (response) {},
+      default: function (response) { },
     };
 
     handleAPIRequest(
@@ -278,6 +272,12 @@ const Homepage = () => {
     }
   }
 
+  function updateContent(key) {
+    dispatch(updatePagination({ currentPage: key, updatingContent: true }));
+    dispatch(updateOverlay({ isVisible: true }));
+    retrieveData('characters', key, state);
+  }
+
   useEffect(function () {
     const successCallback = function (response, pageIndex) {
       const { info, results } = response.data;
@@ -314,12 +314,6 @@ const Homepage = () => {
     },
     [totalPages],
   );
-
-  function updateContent(key) {
-    dispatch(updatePagination({ currentPage: key, updatingContent: true }));
-    dispatch(updateOverlay({ isVisible: true }));
-    retrieveData('characters', key, state);
-  }
 
   return (
     <>
