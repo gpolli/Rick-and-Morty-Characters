@@ -16,29 +16,31 @@ const CardInfoList = ({ parentClass, content }) => {
       case 'location':
         return (
           <div className={`${parentClass ? parentClass : ''} card-info-list`}>
-            {
-              Object.keys(content[key]).map((label, index) => {
-                return (<InfoRow label={label} value={content[key][label]} key={index} />);
-              })
-            }
+            {Object.keys(content[key]).map((label, index) => {
+              return <InfoRow label={label} value={content[key][label]} key={index} />;
+            })}
           </div>
         );
       case 'episodes':
         return (
           <div className={`${parentClass ? parentClass : ''} card-info-list`}>
-            {
-              content[key].map((element, index) => {
-                return (<InfoRow value={`${element['episode']} - ${element['name']}`} key={index} />);
-              })
-            }
+            {content[key].map((element, index) => {
+              return <InfoRow value={`${element['episode']} - ${element['name']}`} key={index} />;
+            })}
           </div>
         );
       default:
-        return (<div className={`${parentClass ? parentClass : ''} card-info-list`}>No content available</div>);
+        return (
+          <div className={`${parentClass ? parentClass : ''} card-info-list`}>
+            No content available
+          </div>
+        );
     }
   }
 
-  return (<div className={`${parentClass ? parentClass : ''} card-info-list`}>No content available</div>);
-}
+  return (
+    <div className={`${parentClass ? parentClass : ''} card-info-list`}>No content available</div>
+  );
+};
 
 export default CardInfoList;

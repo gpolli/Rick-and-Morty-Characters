@@ -4,4 +4,4 @@ export const ACTION_TYPES = {
   ADD_CHARACTERS: 'add_characters',
   ADD_LOCATIONS: 'add_locations',
   ADD_EPISODES: 'add_episodes',
-}
+};

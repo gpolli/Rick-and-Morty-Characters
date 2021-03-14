@@ -14,9 +14,12 @@ const CharacterCard = ({ content, character, parentClass }) => {
 
   const createPaginationLabelEnum = (content) => {
     if (!objectIsEmpty(content['dynamic'])) {
-      const paginationLabelEnum = Object.keys(content['dynamic']).reduce((accumulator, currentValue, index) => {
-        return { ...accumulator, [index + 1]: currentValue }
-      }, {});
+      const paginationLabelEnum = Object.keys(content['dynamic']).reduce(
+        (accumulator, currentValue, index) => {
+          return { ...accumulator, [index + 1]: currentValue };
+        },
+        {},
+      );
 
       return Object.freeze(paginationLabelEnum);
     }
@@ -32,17 +35,23 @@ const CharacterCard = ({ content, character, parentClass }) => {
     }
   }
 
-  useEffect(function () {
-    if (!objectIsEmpty(paginationLabels)) {
-      const currentContent = paginationLabels[1];
+  useEffect(
+    function () {
+      if (!objectIsEmpty(paginationLabels)) {
+        const currentContent = paginationLabels[1];
 
-      setCardContent({ [currentContent]: content['dynamic'][currentContent] });
-    }
-  }, [paginationLabels]);
+        setCardContent({ [currentContent]: content['dynamic'][currentContent] });
+      }
+    },
+    [paginationLabels],
+  );
 
-  useEffect(function () {
-    setPaginationLabels(createPaginationLabelEnum(content));
-  }, [content]);
+  useEffect(
+    function () {
+      setPaginationLabels(createPaginationLabelEnum(content));
+    },
+    [content],
+  );
 
   return (
     <div className={`${parentClass} character-card`}>
@@ -52,15 +61,21 @@ const CharacterCard = ({ content, character, parentClass }) => {
         <h3 className="character-card__name">{name}</h3>
         <Pagination
           content={cardContent}
-          updateContent={key => updateContent(key)}
+          updateContent={(key) => updateContent(key)}
           totalPages={Object.keys(content['dynamic']).length}
           styleModifiers={{ reverseContentOrder: true }}
-          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 4, showStartButton: false, showEndButton: false, reinitOnContentUpdate: true }}
-          render={(content) => (<CardInfoList parentClass="pagination__content" content={content} />)}
+          buttonGroupSettings={{
+            labels: paginationLabels,
+            amountToShow: 4,
+            showStartButton: false,
+            showEndButton: false,
+            reinitOnContentUpdate: true,
+          }}
+          render={(content) => <CardInfoList parentClass="pagination__content" content={content} />}
         />
       </section>
     </div>
   );
-}
+};
 
 export default CharacterCard;

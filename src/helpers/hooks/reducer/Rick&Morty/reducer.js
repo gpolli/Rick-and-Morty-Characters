@@ -38,27 +38,31 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        characters: newCharacters
-      }
+        characters: newCharacters,
+      };
     }
     case ACTION_TYPES.ADD_LOCATIONS: {
-      const objectToJoin = joinObjectsFromList(action.payload.map(location => groupObjectByProperty(location, location.name)));
+      const objectToJoin = joinObjectsFromList(
+        action.payload.map((location) => groupObjectByProperty(location, location.name)),
+      );
       const newLocations = { ...state.locations, ...objectToJoin };
 
       return {
         ...state,
-        locations: newLocations
-      }
+        locations: newLocations,
+      };
     }
     case ACTION_TYPES.ADD_EPISODES:
-      const objectToJoin = joinObjectsFromList(action.payload.map(episode => groupObjectByProperty(episode, episode.id)))
+      const objectToJoin = joinObjectsFromList(
+        action.payload.map((episode) => groupObjectByProperty(episode, episode.id)),
+      );
       const newEpisodes = { ...state.episodes, ...objectToJoin };
 
       return {
         ...state,
-        episodes: newEpisodes
-      }
+        episodes: newEpisodes,
+      };
     default:
       return state;
   }
-}
+};
