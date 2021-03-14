@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 /* Assets */
 import logo from '../../assets/images/rick_morty_logo.png';
 /* Components */
+import Overlay from '../../components/Overlay';
+import Loader from '../../components/Loader';
 import Pagination from '../../components/Pagination';
 import CharactersList from '../../components/CharactersList';
 import Footer from '../../components/Footer';
@@ -16,8 +18,9 @@ import './style.css';
 const Homepage = () => {
   const state = useGlobal();
   const dispatch = useGlobalUpdater();
+  const { overlay } = state;
   const { currentPage, totalPages, updatingContent } = state.pagination;
-  const { updatePagination, addCharacters, addLocations, addEpisodes } = actions;
+  const { updateOverlay, updatePagination, addCharacters, addLocations, addEpisodes } = actions;
   const [pageContent, setPageContent] = useState({ characters: [] });
   const [paginationLabels, setPaginationLabels] = useState({});
 
@@ -194,12 +197,22 @@ const Homepage = () => {
             dispatch(addEpisodes(response));
             setPageContent({ ...pageContent, episodes: joinObjectsFromList([...storedData, ...response].map(episode => groupObjectByProperty(episode, episode.id))) });
             dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
+
+            if (overlay.isVisible) {
+              window.scrollTo(0, document.body.scrollHeight);
+              dispatch(updateOverlay({ isVisible: false }));
+            }
           }
 
           fetchEpisodesData(dataIndexes['toRequire'], successCallback);
         } else {
           setPageContent({ ...pageContent, episodes: joinObjectsFromList(storedData.map(episode => groupObjectByProperty(episode, episode.id))) });
           dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
+
+          if (overlay.isVisible) {
+            window.scrollTo(0, document.body.scrollHeight);
+            dispatch(updateOverlay({ isVisible: false }));
+          }
         }
 
         break;
@@ -237,23 +250,15 @@ const Homepage = () => {
 
   function updateContent(key) {
     dispatch(updatePagination({ currentPage: key, updatingContent: true }));
+    dispatch(updateOverlay({ isVisible: true }));
     retrieveData('characters', key, state);
   }
 
-
-  // test
-  // useEffect(function () {
-  //   console.log('characters: ', pageContent);
-  // }, [pageContent.characters]);
-  // useEffect(function () {
-  //   console.log('locations: ', pageContent);
-  // }, [pageContent.locations]);
-  // useEffect(function () {
-  //   console.log('episodes: ', pageContent);
-  // }, [pageContent.episodes]);
-
   return (
     <>
+      <Overlay isVisible={overlay.isVisible}>
+        <Loader />
+      </Overlay>
       <main className="homepage">
         <img className="homepage__logo" src={logo} alt="Rick&Morty logo" />
         <Pagination

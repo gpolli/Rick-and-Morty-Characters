@@ -1,6 +1,12 @@
 import { ACTION_TYPES } from './actionTypes';
 
 export const actions = {
+  updateOverlay: (payload) => {
+    return {
+      type: ACTION_TYPES.UPDATE_OVERLAY,
+      payload,
+    };
+  },
   updatePagination: (payload) => {
     return {
       type: ACTION_TYPES.UPDATE_PAGINATION,
