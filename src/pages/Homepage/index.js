@@ -13,10 +13,10 @@ import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Helpers */
 import {
   removeDuplicatesFromList,
-  handleAPIRequest,
   joinObjectsFromList,
   groupObjectByProperty,
 } from '../../helpers/utils';
+import { formatResponse, fetchCharactersData, fetchLocationsData, fetchEpisodesData, getDataIndexesToRetrieve } from '../../helpers/handleAPIResponse';
 /* Style */
 import './style.css';
 
@@ -39,132 +39,52 @@ const Homepage = () => {
     return Object.freeze(paginationLabelEnum);
   };
 
-  const formatResponse = (response) => {
-    if (Array.isArray(response)) return response;
+  function updateContent(key) {
+    dispatch(updatePagination({ currentPage: key, updatingContent: true }));
+    dispatch(updateOverlay({ isVisible: true }));
+    retrieveData('characters', key, state);
+  }
 
-    if (response.hasOwnProperty('info')) {
-      return response.results;
+  function handleCharactersSuccessResponse(response, pageIndex) {
+    const { results } = response.data;
+
+    dispatch(addCharacters({ list: results, pageIndex }));
+    setPageContent({ characters: results });
+  }
+
+  function handleLocationsSuccessResponse(response, storedData) {
+    response = formatResponse(response);
+
+    dispatch(addLocations(response));
+    setPageContent({
+      ...pageContent,
+      locations: joinObjectsFromList(
+        [...storedData, ...response].map((location) =>
+          groupObjectByProperty(location, location.name),
+        ),
+      ),
+    });
+  }
+
+  function handleEpisodesSuccessResponse(response, storedData) {
+    response = formatResponse(response);
+
+    dispatch(addEpisodes(response));
+    setPageContent({
+      ...pageContent,
+      episodes: joinObjectsFromList(
+        [...storedData, ...response].map((episode) =>
+          groupObjectByProperty(episode, episode.id),
+        ),
+      ),
+    });
+    dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
+
+    if (overlay.isVisible) {
+      window.scrollTo(0, document.body.scrollHeight);
+      dispatch(updateOverlay({ isVisible: false }));
     }
-
-    return [response];
-  };
-
-  function fetchCharactersData(pageIndex, successCallback) {
-    const query = pageIndex ? `?page=${pageIndex}` : '';
-
-    const callbacks = {
-      200: function (response) {
-        successCallback(response, pageIndex);
-      },
-      404: function (response) {},
-      500: function (response) {},
-      default: function (response) {},
-    };
-
-    handleAPIRequest(
-      {
-        method: 'GET',
-        url: `https://rickandmortyapi.com/api/character${query}`,
-      },
-      callbacks,
-    );
   }
-
-  function fetchLocationsData(locationsIndexes, successCallback) {
-    const query = locationsIndexes ? `/${locationsIndexes}` : '';
-
-    const callbacks = {
-      200: function (response) {
-        successCallback(response.data);
-      },
-      404: function (response) {},
-      500: function (response) {},
-      default: function (response) {},
-    };
-
-    handleAPIRequest(
-      {
-        method: 'GET',
-        url: `https://rickandmortyapi.com/api/location${query}`,
-      },
-      callbacks,
-    );
-  }
-
-  function fetchEpisodesData(episodesIndexes, successCallback) {
-    const query = episodesIndexes ? `/${episodesIndexes}` : '';
-
-    const callbacks = {
-      200: function (response) {
-        successCallback(response.data);
-      },
-      404: function (response) {},
-      500: function (response) {},
-      default: function (response) {},
-    };
-
-    handleAPIRequest(
-      {
-        method: 'GET',
-        url: `https://rickandmortyapi.com/api/episode${query}`,
-      },
-      callbacks,
-    );
-  }
-
-  const getDataIndexesToRetrieve = (type, key, store) => {
-    const regex = /[0-9]+/;
-    const pageCharacters = store['characters'][key];
-    const dataIndexes = { stored: [], toRequire: [] };
-
-    switch (type) {
-      case 'location':
-      case 'origin': {
-        if (pageCharacters) {
-          const pageCharactersWithUrl = pageCharacters.filter(
-            (character) => character[type]['url'],
-          );
-          const dataIndexesList = pageCharactersWithUrl.map(
-            (character) => character[type]['url'].match(regex)[0],
-          );
-          const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
-
-          dataIndexesListWithoutDuplicates.forEach((index) => {
-            if (
-              Object.values(store['locations']).some((location) => location.id === Number(index))
-            ) {
-              dataIndexes['stored'].push(index);
-            } else {
-              dataIndexes['toRequire'].push(index);
-            }
-          });
-        }
-
-        break;
-      }
-      case 'episode': {
-        const pageCharactersWithUrl = pageCharacters.filter((character) => character[type].length);
-        const episodesUrlList = pageCharactersWithUrl.reduce((accumulator, currentValue) => {
-          return [...accumulator, ...currentValue[type]];
-        }, []);
-        const dataIndexesList = episodesUrlList.map((url) => url.match(regex)[0]);
-        const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
-
-        dataIndexesListWithoutDuplicates.forEach((index) => {
-          if (Object.values(store['episodes']).some((episode) => episode.id === Number(index))) {
-            dataIndexes['stored'].push(index);
-          } else {
-            dataIndexes['toRequire'].push(index);
-          }
-        });
-
-        break;
-      }
-      default:
-    }
-
-    return dataIndexes;
-  };
 
   function retrieveData(type, key, store) {
     switch (type) {
@@ -172,14 +92,7 @@ const Homepage = () => {
         if (Object.keys(store['characters']).some((storedKey) => storedKey === String(key))) {
           setPageContent({ characters: store['characters'][key] });
         } else {
-          const successCallback = function (response, pageIndex) {
-            const { results } = response.data;
-
-            dispatch(addCharacters({ list: results, pageIndex }));
-            setPageContent({ characters: results });
-          };
-
-          fetchCharactersData(key, successCallback);
+          fetchCharactersData(key, handleCharactersSuccessResponse);
         }
         break;
       case 'locations': {
@@ -203,21 +116,7 @@ const Homepage = () => {
         );
 
         if (mergedDataIndexedToRequire) {
-          const successCallback = function (response) {
-            response = formatResponse(response);
-
-            dispatch(addLocations(response));
-            setPageContent({
-              ...pageContent,
-              locations: joinObjectsFromList(
-                [...storedData, ...response].map((location) =>
-                  groupObjectByProperty(location, location.name),
-                ),
-              ),
-            });
-          };
-
-          fetchLocationsData(mergedDataIndexedToRequire, successCallback);
+          fetchLocationsData(mergedDataIndexedToRequire, (response) => handleLocationsSuccessResponse(response, storedData));
         } else {
           setPageContent({
             ...pageContent,
@@ -237,27 +136,7 @@ const Homepage = () => {
         );
 
         if (dataIndexes['toRequire'].join()) {
-          const successCallback = function (response) {
-            response = formatResponse(response);
-
-            dispatch(addEpisodes(response));
-            setPageContent({
-              ...pageContent,
-              episodes: joinObjectsFromList(
-                [...storedData, ...response].map((episode) =>
-                  groupObjectByProperty(episode, episode.id),
-                ),
-              ),
-            });
-            dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
-
-            if (overlay.isVisible) {
-              window.scrollTo(0, document.body.scrollHeight);
-              dispatch(updateOverlay({ isVisible: false }));
-            }
-          };
-
-          fetchEpisodesData(dataIndexes['toRequire'], successCallback);
+          fetchEpisodesData(dataIndexes['toRequire'], (response) => handleEpisodesSuccessResponse(response, storedData));
         } else {
           setPageContent({
             ...pageContent,
@@ -314,12 +193,6 @@ const Homepage = () => {
     },
     [totalPages],
   );
-
-  function updateContent(key) {
-    dispatch(updatePagination({ currentPage: key, updatingContent: true }));
-    dispatch(updateOverlay({ isVisible: true }));
-    retrieveData('characters', key, state);
-  }
 
   return (
     <>

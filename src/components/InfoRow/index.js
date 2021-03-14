@@ -2,7 +2,7 @@ import React from 'react';
 /* Style */
 import './style.css';
 
-const InfoRow = ({ label, value }) => {
+const InfoRow = ({ label = '', value = '' }) => {
   return (
     <div className={`info-row ${!label ? 'info-row--only-value' : ''}`}>
       {label ? <p className="info-row__label">{label}: </p> : null}

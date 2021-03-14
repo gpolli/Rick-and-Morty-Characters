@@ -8,7 +8,7 @@ import { capitalizeFirstLetter } from '../../helpers/utils';
 import './style.css';
 
 const CharactersList = ({
-  parentClass,
+  parentClass = '',
   content = { characters: [], location: [], episodes: [] },
 }) => {
   const { characters } = content;
@@ -79,8 +79,8 @@ const CharactersList = ({
             : 'Unknown',
         'amount of residents':
           data.locations?.[originName] &&
-          data.locations?.[originName]['residents'] &&
-          Array.isArray(data.locations?.[originName]['residents'])
+            data.locations?.[originName]['residents'] &&
+            Array.isArray(data.locations?.[originName]['residents'])
             ? data['locations'][originName]['residents'].length
             : 'Unknown',
       };
@@ -97,8 +97,8 @@ const CharactersList = ({
             : 'Unknown',
         'amount of residents':
           data.locations?.[locationName] &&
-          data.locations?.[locationName]['residents'] &&
-          Array.isArray(data.locations?.[locationName]['residents'])
+            data.locations?.[locationName]['residents'] &&
+            Array.isArray(data.locations?.[locationName]['residents'])
             ? data['locations'][locationName]['residents'].length
             : 'Unknown',
       };
@@ -133,8 +133,8 @@ const CharactersList = ({
           />
         ))
       ) : (
-        <Loader parentClass="characters-list__loader" />
-      )}
+          <Loader parentClass="characters-list__loader" />
+        )}
     </section>
   );
 };

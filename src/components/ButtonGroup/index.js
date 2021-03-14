@@ -6,7 +6,7 @@ import Button from '../Button';
 /* Style */
 import './style.css';
 
-const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent }) => {
+const ButtonGroup = ({ parentClass = '', settings = { currentPage: 1, totalPages: 1, labels: { 1: "1" }, amountToShow: 1, showStartButton: false, showEndButton: false, styleModifiers: {} }, updateCurrentPage = function () { }, updatingContent = false }) => {
   const {
     currentPage,
     totalPages,
@@ -17,7 +17,6 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent
     reinitOnContentUpdate,
     styleModifiers,
   } = settings;
-  // const { position, size, shape } = styleModifiers;
   const [buttons, setButtons] = useState([]);
 
   function renderButtons(currentPage, totalPages, amountToShow) {
@@ -49,7 +48,7 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent
           <Button
             className={`${i === currentPage ? 'button--is-active' : ''}`}
             text={labels[i]}
-            clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () {}}
+            clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () { }}
             key={i}
           />,
         );
@@ -110,13 +109,11 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent
 
   return (
     <section
-      className={`${parentClass ? parentClass : ''} button-group ${
-        styleModifiers?.size ? `button-group--${styleModifiers.size}` : ''
-      } ${
-        styleModifiers?.buttonWidth
+      className={`${parentClass ? parentClass : ''} button-group ${styleModifiers?.size ? `button-group--${styleModifiers.size}` : ''
+        } ${styleModifiers?.buttonWidth
           ? `button-group--button-width-${styleModifiers.buttonWidth}`
           : ''
-      }`}
+        }`}
     >
       {buttons}
     </section>
