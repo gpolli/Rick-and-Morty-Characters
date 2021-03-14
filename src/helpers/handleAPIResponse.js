@@ -17,7 +17,7 @@ export function fetchCharactersData(pageIndex, successCallback) {
     200: function (response) {
       successCallback(response, pageIndex);
     },
-    default: function (response) { },
+    default: function (response) {},
   };
 
   handleAPIRequest(
@@ -36,7 +36,7 @@ export function fetchLocationsData(locationsIndexes, successCallback) {
     200: function (response) {
       successCallback(response.data);
     },
-    default: function (response) { },
+    default: function (response) {},
   };
 
   handleAPIRequest(
@@ -55,7 +55,7 @@ export function fetchEpisodesData(episodesIndexes, successCallback) {
     200: function (response) {
       successCallback(response.data);
     },
-    default: function (response) { },
+    default: function (response) {},
   };
 
   handleAPIRequest(
@@ -76,18 +76,14 @@ export const getDataIndexesToRetrieve = (type, key, store) => {
     case 'location':
     case 'origin': {
       if (pageCharacters) {
-        const pageCharactersWithUrl = pageCharacters.filter(
-          (character) => character[type]['url'],
-        );
+        const pageCharactersWithUrl = pageCharacters.filter((character) => character[type]['url']);
         const dataIndexesList = pageCharactersWithUrl.map(
           (character) => character[type]['url'].match(regex)[0],
         );
         const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
 
         dataIndexesListWithoutDuplicates.forEach((index) => {
-          if (
-            Object.values(store['locations']).some((location) => location.id === Number(index))
-          ) {
+          if (Object.values(store['locations']).some((location) => location.id === Number(index))) {
             dataIndexes['stored'].push(index);
           } else {
             dataIndexes['toRequire'].push(index);

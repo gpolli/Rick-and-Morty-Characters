@@ -7,7 +7,11 @@ import { objectIsEmpty } from '../../helpers/utils';
 /* Style */
 import './style.css';
 
-const CharacterCard = ({ content = { static: {}, dynamic: {} }, character = {}, parentClass = '' }) => {
+const CharacterCard = ({
+  content = { static: {}, dynamic: {} },
+  character = {},
+  parentClass = '',
+}) => {
   const { name, image } = character;
   const [cardContent, setCardContent] = useState({});
   const [paginationLabels, setPaginationLabels] = useState({});
