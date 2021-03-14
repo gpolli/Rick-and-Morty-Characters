@@ -10,35 +10,35 @@ export const objectIsEmpty = (object) => {
 
 export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
 
 export const removeDuplicatesFromList = (list) => {
   return list.filter((item, currentIndex) => list.indexOf(item) === currentIndex);
-}
+};
 
 export const setIdAsObjectKey = (object) => {
   return {
-    [object.id]: object
-  }
-}
+    [object.id]: object,
+  };
+};
 
 export const groupListByPageIndex = (list, pageIndex) => {
-  return { [pageIndex]: list }
-}
+  return { [pageIndex]: list };
+};
 
 export const groupObjectByProperty = (object, property) => {
-  return { [property]: object }
-}
+  return { [property]: object };
+};
 
 export const getSortedListOfObject = (list) => {
-  return list.map(item => setIdAsObjectKey(item)).sort((a, b) => a.id - b.id);
-}
+  return list.map((item) => setIdAsObjectKey(item)).sort((a, b) => a.id - b.id);
+};
 
 export const joinObjectsFromList = (list) => {
   return list.reduce((accumulator, currentValue) => {
     return { ...accumulator, ...currentValue };
   });
-}
+};
 
 const handleSuccessDefault = function (response, callbacks, options) {
   if (response?.hasOwnProperty('data') && response.data?.hasOwnProperty('Result')) {

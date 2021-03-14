@@ -4,8 +4,8 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem 0;
-  background-color: #3A3973;
-  background-image: url("../../assets/images/rick_morty_stars_background.png");
+  background-color: #3a3973;
+  background-image: url('../../assets/images/rick_morty_stars_background.png');
   background-repeat: no-repeat;
   background-position: center top;
   background-size: contain;
