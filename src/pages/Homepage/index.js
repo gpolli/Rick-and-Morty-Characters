@@ -261,6 +261,7 @@ const Homepage = () => {
       </Overlay>
       <main className="homepage">
         <img className="homepage__logo" src={logo} alt="Rick&Morty logo" />
+        <h2 className="homepage__subtitle">Characters List</h2>
         <Pagination
           content={pageContent}
           updateContent={(key) => updateContent(key)}

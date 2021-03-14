@@ -21,3 +21,44 @@
     padding: 0 1rem 2rem 3rem;
   }
 }
+
+.homepage__subtitle {
+  margin: -2rem 0 0rem;
+  color: #ffffff;
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #000000;
+}
+
+@media (min-width: 768px) {
+  .homepage__subtitle {
+    margin: -3rem 0 2rem;
+    font-size: 3rem;
+    letter-spacing: 3px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .homepage__subtitle {
+    margin: -4rem 0 2rem;
+    font-size: 4rem;
+    letter-spacing: 4px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .homepage__subtitle {
+    margin: -4.5rem 0 2rem;
+    font-size: 4.5rem;
+    letter-spacing: 5px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .homepage__subtitle {
+    margin: -6rem 0 3rem;
+    font-size: 6rem;
+    letter-spacing: 6px;
+  }
+}
