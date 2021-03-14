@@ -2,9 +2,9 @@ import React from 'react';
 /* Style */
 import './style.css';
 
-const Loader = () => {
+const Loader = ({ parentClass = "" }) => {
   return (
-    <div className="loader">
+    <div className={`${parentClass ? parentClass : ''} loader`}>
       <p className="loader__text">Loading</p>
       <div className="loader__spinner"></div>
     </div>

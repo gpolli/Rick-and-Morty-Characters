@@ -1,5 +1,6 @@
 import React from 'react';
 /* Components */
+import Loader from '../Loader';
 import CharacterCard from '../CharacterCard';
 /* Helpers */
 import { capitalizeFirstLetter } from '../../helpers/utils';
@@ -88,7 +89,7 @@ const CharactersList = ({ parentClass, content = { characters: [], location: [],
       {
         characters.length
           ? characters.map((character, index) => (<CharacterCard character={character} content={setCardContent(character, content)} parentClass="characters-list__character-item" key={index} />))
-          : "No characters found"
+          : <Loader parentClass="characters-list__loader" />
       }
     </section>
   );
