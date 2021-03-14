@@ -6,7 +6,7 @@ import Button from '../Button';
 /* Style */
 import './style.css';
 
-const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent }) => {
+const ButtonGroup = ({ parentClass = '', settings = { currentPage: 1, totalPages: 1, labels: { 1: "1" }, amountToShow: 1, showStartButton: false, showEndButton: false, styleModifiers: {} }, updateCurrentPage = function () { }, updatingContent = false }) => {
   const {
     currentPage,
     totalPages,

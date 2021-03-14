@@ -5,13 +5,13 @@ import ButtonGroup from '../ButtonGroup';
 import './style.css';
 
 const Pagination = ({
-  content,
-  updateContent,
-  updatingContent,
-  totalPages = 20,
+  content = { characters: [] },
+  updateContent = function () { },
+  updatingContent = false,
+  totalPages = 1,
   parentClass = '',
-  styleModifiers,
-  buttonGroupSettings,
+  styleModifiers = {},
+  buttonGroupSettings = {},
   render,
 }) => {
   const [pagination, setPagination] = useState({ currentPage: 1, pages: totalPages });

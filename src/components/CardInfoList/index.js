@@ -6,7 +6,7 @@ import { objectIsEmpty } from '../../helpers/utils';
 /* Style */
 import './style.css';
 
-const CardInfoList = ({ parentClass, content }) => {
+const CardInfoList = ({ parentClass = '', content = {} }) => {
   if (!objectIsEmpty(content)) {
     const key = Object.keys(content)[0];
 
