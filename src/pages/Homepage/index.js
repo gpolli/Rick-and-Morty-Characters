@@ -16,7 +16,13 @@ import {
   joinObjectsFromList,
   groupObjectByProperty,
 } from '../../helpers/utils';
-import { formatResponse, fetchCharactersData, fetchLocationsData, fetchEpisodesData, getDataIndexesToRetrieve } from '../../helpers/handleAPIResponse';
+import {
+  formatResponse,
+  fetchCharactersData,
+  fetchLocationsData,
+  fetchEpisodesData,
+  getDataIndexesToRetrieve,
+} from '../../helpers/handleAPIResponse';
 /* Style */
 import './style.css';
 
@@ -73,9 +79,7 @@ const Homepage = () => {
     setPageContent({
       ...pageContent,
       episodes: joinObjectsFromList(
-        [...storedData, ...response].map((episode) =>
-          groupObjectByProperty(episode, episode.id),
-        ),
+        [...storedData, ...response].map((episode) => groupObjectByProperty(episode, episode.id)),
       ),
     });
     dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
@@ -116,7 +120,9 @@ const Homepage = () => {
         );
 
         if (mergedDataIndexedToRequire) {
-          fetchLocationsData(mergedDataIndexedToRequire, (response) => handleLocationsSuccessResponse(response, storedData));
+          fetchLocationsData(mergedDataIndexedToRequire, (response) =>
+            handleLocationsSuccessResponse(response, storedData),
+          );
         } else {
           setPageContent({
             ...pageContent,
@@ -136,7 +142,9 @@ const Homepage = () => {
         );
 
         if (dataIndexes['toRequire'].join()) {
-          fetchEpisodesData(dataIndexes['toRequire'], (response) => handleEpisodesSuccessResponse(response, storedData));
+          fetchEpisodesData(dataIndexes['toRequire'], (response) =>
+            handleEpisodesSuccessResponse(response, storedData),
+          );
         } else {
           setPageContent({
             ...pageContent,
