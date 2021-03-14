@@ -11,7 +11,12 @@ import Footer from '../../components/Footer';
 import { useGlobal, useGlobalUpdater } from '../../helpers/hooks/context/Rick&Morty/GlobalContext';
 import { actions } from '../../helpers/hooks/reducer/Rick&Morty/actions';
 /* Helpers */
-import { removeDuplicatesFromList, handleAPIRequest, joinObjectsFromList, groupObjectByProperty } from '../../helpers/utils';
+import {
+  removeDuplicatesFromList,
+  handleAPIRequest,
+  joinObjectsFromList,
+  groupObjectByProperty,
+} from '../../helpers/utils';
 /* Style */
 import './style.css';
 
@@ -32,7 +37,7 @@ const Homepage = () => {
     }
 
     return Object.freeze(paginationLabelEnum);
-  }
+  };
 
   const formatResponse = (response) => {
     if (Array.isArray(response)) return response;
@@ -41,8 +46,8 @@ const Homepage = () => {
       return response.results;
     }
 
-    return [response]
-  }
+    return [response];
+  };
 
   function fetchCharactersData(pageIndex, successCallback) {
     const query = pageIndex ? `?page=${pageIndex}` : '';
@@ -51,15 +56,18 @@ const Homepage = () => {
       200: function (response) {
         successCallback(response, pageIndex);
       },
-      404: function (response) { },
-      500: function (response) { },
-      default: function (response) { },
-    }
+      404: function (response) {},
+      500: function (response) {},
+      default: function (response) {},
+    };
 
-    handleAPIRequest({
-      method: 'GET',
-      url: `https://rickandmortyapi.com/api/character${query}`
-    }, callbacks);
+    handleAPIRequest(
+      {
+        method: 'GET',
+        url: `https://rickandmortyapi.com/api/character${query}`,
+      },
+      callbacks,
+    );
   }
 
   function fetchLocationsData(locationsIndexes, successCallback) {
@@ -69,15 +77,18 @@ const Homepage = () => {
       200: function (response) {
         successCallback(response.data);
       },
-      404: function (response) { },
-      500: function (response) { },
-      default: function (response) { },
-    }
+      404: function (response) {},
+      500: function (response) {},
+      default: function (response) {},
+    };
 
-    handleAPIRequest({
-      method: 'GET',
-      url: `https://rickandmortyapi.com/api/location${query}`
-    }, callbacks);
+    handleAPIRequest(
+      {
+        method: 'GET',
+        url: `https://rickandmortyapi.com/api/location${query}`,
+      },
+      callbacks,
+    );
   }
 
   function fetchEpisodesData(episodesIndexes, successCallback) {
@@ -87,15 +98,18 @@ const Homepage = () => {
       200: function (response) {
         successCallback(response.data);
       },
-      404: function (response) { },
-      500: function (response) { },
-      default: function (response) { },
-    }
+      404: function (response) {},
+      500: function (response) {},
+      default: function (response) {},
+    };
 
-    handleAPIRequest({
-      method: 'GET',
-      url: `https://rickandmortyapi.com/api/episode${query}`
-    }, callbacks);
+    handleAPIRequest(
+      {
+        method: 'GET',
+        url: `https://rickandmortyapi.com/api/episode${query}`,
+      },
+      callbacks,
+    );
   }
 
   const getDataIndexesToRetrieve = (type, key, store) => {
@@ -107,12 +121,18 @@ const Homepage = () => {
       case 'location':
       case 'origin': {
         if (pageCharacters) {
-          const pageCharactersWithUrl = pageCharacters.filter(character => character[type]['url']);
-          const dataIndexesList = pageCharactersWithUrl.map(character => character[type]['url'].match(regex)[0]);
+          const pageCharactersWithUrl = pageCharacters.filter(
+            (character) => character[type]['url'],
+          );
+          const dataIndexesList = pageCharactersWithUrl.map(
+            (character) => character[type]['url'].match(regex)[0],
+          );
           const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
 
-          dataIndexesListWithoutDuplicates.forEach(index => {
-            if (Object.values(store['locations']).some(location => location.id === Number(index))) {
+          dataIndexesListWithoutDuplicates.forEach((index) => {
+            if (
+              Object.values(store['locations']).some((location) => location.id === Number(index))
+            ) {
               dataIndexes['stored'].push(index);
             } else {
               dataIndexes['toRequire'].push(index);
@@ -123,15 +143,15 @@ const Homepage = () => {
         break;
       }
       case 'episode': {
-        const pageCharactersWithUrl = pageCharacters.filter(character => character[type].length);
+        const pageCharactersWithUrl = pageCharacters.filter((character) => character[type].length);
         const episodesUrlList = pageCharactersWithUrl.reduce((accumulator, currentValue) => {
-          return [...accumulator, ...currentValue[type]]
+          return [...accumulator, ...currentValue[type]];
         }, []);
-        const dataIndexesList = episodesUrlList.map(url => url.match(regex)[0]);
+        const dataIndexesList = episodesUrlList.map((url) => url.match(regex)[0]);
         const dataIndexesListWithoutDuplicates = removeDuplicatesFromList(dataIndexesList);
 
-        dataIndexesListWithoutDuplicates.forEach(index => {
-          if (Object.values(store['episodes']).some(episode => episode.id === Number(index))) {
+        dataIndexesListWithoutDuplicates.forEach((index) => {
+          if (Object.values(store['episodes']).some((episode) => episode.id === Number(index))) {
             dataIndexes['stored'].push(index);
           } else {
             dataIndexes['toRequire'].push(index);
@@ -144,20 +164,20 @@ const Homepage = () => {
     }
 
     return dataIndexes;
-  }
+  };
 
   function retrieveData(type, key, store) {
     switch (type) {
       case 'characters':
-        if (Object.keys(store['characters']).some(storedKey => storedKey === String(key))) {
+        if (Object.keys(store['characters']).some((storedKey) => storedKey === String(key))) {
           setPageContent({ characters: store['characters'][key] });
         } else {
           const successCallback = function (response, pageIndex) {
             const { results } = response.data;
 
             dispatch(addCharacters({ list: results, pageIndex }));
-            setPageContent({ characters: results })
-          }
+            setPageContent({ characters: results });
+          };
 
           fetchCharactersData(key, successCallback);
         }
@@ -166,47 +186,85 @@ const Homepage = () => {
         const originsDataIndexes = getDataIndexesToRetrieve('origin', key, store);
         const locationsDataIndexes = getDataIndexesToRetrieve('location', key, store);
 
-        const mergedDataIndexedStored = removeDuplicatesFromList([...originsDataIndexes['stored'], ...locationsDataIndexes['stored']]);
-        const mergedDataIndexedToRequire = removeDuplicatesFromList([...originsDataIndexes['toRequire'], ...locationsDataIndexes['toRequire']]).join();
+        const mergedDataIndexedStored = removeDuplicatesFromList([
+          ...originsDataIndexes['stored'],
+          ...locationsDataIndexes['stored'],
+        ]);
+        const mergedDataIndexedToRequire = removeDuplicatesFromList([
+          ...originsDataIndexes['toRequire'],
+          ...locationsDataIndexes['toRequire'],
+        ]).join();
 
-        const storedData = mergedDataIndexedStored.map(index => Object.values(store['locations']).filter(location => location.id === Number(index))[0]);
+        const storedData = mergedDataIndexedStored.map(
+          (index) =>
+            Object.values(store['locations']).filter(
+              (location) => location.id === Number(index),
+            )[0],
+        );
 
         if (mergedDataIndexedToRequire) {
           const successCallback = function (response) {
             response = formatResponse(response);
 
             dispatch(addLocations(response));
-            setPageContent({ ...pageContent, locations: joinObjectsFromList([...storedData, ...response].map(location => groupObjectByProperty(location, location.name))) });
-          }
+            setPageContent({
+              ...pageContent,
+              locations: joinObjectsFromList(
+                [...storedData, ...response].map((location) =>
+                  groupObjectByProperty(location, location.name),
+                ),
+              ),
+            });
+          };
 
           fetchLocationsData(mergedDataIndexedToRequire, successCallback);
         } else {
-          setPageContent({ ...pageContent, locations: joinObjectsFromList(storedData.map(location => groupObjectByProperty(location, location.name))) });
+          setPageContent({
+            ...pageContent,
+            locations: joinObjectsFromList(
+              storedData.map((location) => groupObjectByProperty(location, location.name)),
+            ),
+          });
         }
 
         break;
       }
       case 'episodes':
         const dataIndexes = getDataIndexesToRetrieve('episode', key, store);
-        const storedData = dataIndexes['stored'].map(index => Object.values(store['episodes']).filter(episode => episode.id === Number(index))[0]);
+        const storedData = dataIndexes['stored'].map(
+          (index) =>
+            Object.values(store['episodes']).filter((episode) => episode.id === Number(index))[0],
+        );
 
         if (dataIndexes['toRequire'].join()) {
           const successCallback = function (response) {
             response = formatResponse(response);
 
             dispatch(addEpisodes(response));
-            setPageContent({ ...pageContent, episodes: joinObjectsFromList([...storedData, ...response].map(episode => groupObjectByProperty(episode, episode.id))) });
+            setPageContent({
+              ...pageContent,
+              episodes: joinObjectsFromList(
+                [...storedData, ...response].map((episode) =>
+                  groupObjectByProperty(episode, episode.id),
+                ),
+              ),
+            });
             dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
 
             if (overlay.isVisible) {
               window.scrollTo(0, document.body.scrollHeight);
               dispatch(updateOverlay({ isVisible: false }));
             }
-          }
+          };
 
           fetchEpisodesData(dataIndexes['toRequire'], successCallback);
         } else {
-          setPageContent({ ...pageContent, episodes: joinObjectsFromList(storedData.map(episode => groupObjectByProperty(episode, episode.id))) });
+          setPageContent({
+            ...pageContent,
+            episodes: joinObjectsFromList(
+              storedData.map((episode) => groupObjectByProperty(episode, episode.id)),
+            ),
+          });
           dispatch(updatePagination({ ...state.pagination, updatingContent: false }));
 
           if (overlay.isVisible) {
@@ -226,27 +284,36 @@ const Homepage = () => {
 
       dispatch(updatePagination({ totalPages: info.pages }));
       dispatch(addCharacters({ list: results, pageIndex }));
-      setPageContent({ ...pageContent, characters: results })
-    }
+      setPageContent({ ...pageContent, characters: results });
+    };
 
     fetchCharactersData(1, successCallback);
   }, []);
 
-  useEffect(function () {
-    if (pageContent.characters.length) {
-      retrieveData('locations', currentPage, state);
-    }
-  }, [pageContent.characters]);
+  useEffect(
+    function () {
+      if (pageContent.characters.length) {
+        retrieveData('locations', currentPage, state);
+      }
+    },
+    [pageContent.characters],
+  );
 
-  useEffect(function () {
-    if (pageContent.characters.length && pageContent.locations) {
-      retrieveData('episodes', currentPage, state);
-    }
-  }, [pageContent.locations]);
+  useEffect(
+    function () {
+      if (pageContent.characters.length && pageContent.locations) {
+        retrieveData('episodes', currentPage, state);
+      }
+    },
+    [pageContent.locations],
+  );
 
-  useEffect(function () {
-    setPaginationLabels(createPaginationLabelEnum(totalPages));
-  }, [totalPages]);
+  useEffect(
+    function () {
+      setPaginationLabels(createPaginationLabelEnum(totalPages));
+    },
+    [totalPages],
+  );
 
   function updateContent(key) {
     dispatch(updatePagination({ currentPage: key, updatingContent: true }));
@@ -268,12 +335,22 @@ const Homepage = () => {
           updatingContent={updatingContent}
           totalPages={totalPages}
           parentClass="homepage__pagination"
-          buttonGroupSettings={{ labels: paginationLabels, amountToShow: 3, showStartButton: true, showEndButton: true, reinitOnContentUpdate: false, styleModifiers: { size: 'big', buttonWidth: 'fixed' } }}
-          render={content => (<CharactersList parentClass="pagination__content" content={content} />)} />
+          buttonGroupSettings={{
+            labels: paginationLabels,
+            amountToShow: 3,
+            showStartButton: true,
+            showEndButton: true,
+            reinitOnContentUpdate: false,
+            styleModifiers: { size: 'big', buttonWidth: 'fixed' },
+          }}
+          render={(content) => (
+            <CharactersList parentClass="pagination__content" content={content} />
+          )}
+        />
       </main>
       <Footer />
     </>
   );
-}
+};
 
 export default Homepage;

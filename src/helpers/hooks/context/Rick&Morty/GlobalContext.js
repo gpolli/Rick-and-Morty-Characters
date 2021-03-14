@@ -17,9 +17,7 @@ export const GlobalProvider = ({ children }) => {
 
   return (
     <GlobalContext.Provider value={state}>
-      <GlobalUpdaterContext.Provider value={updateState}>
-        {children}
-      </GlobalUpdaterContext.Provider>
+      <GlobalUpdaterContext.Provider value={updateState}>{children}</GlobalUpdaterContext.Provider>
     </GlobalContext.Provider>
   );
-}
+};

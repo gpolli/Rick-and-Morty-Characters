@@ -4,7 +4,16 @@ import ButtonGroup from '../ButtonGroup';
 /* Style */
 import './style.css';
 
-const Pagination = ({ content, updateContent, updatingContent, totalPages = 20, parentClass = "", styleModifiers, buttonGroupSettings, render }) => {
+const Pagination = ({
+  content,
+  updateContent,
+  updatingContent,
+  totalPages = 20,
+  parentClass = '',
+  styleModifiers,
+  buttonGroupSettings,
+  render,
+}) => {
   const [pagination, setPagination] = useState({ currentPage: 1, pages: totalPages });
   const { currentPage } = pagination;
 
@@ -17,19 +26,31 @@ const Pagination = ({ content, updateContent, updatingContent, totalPages = 20, 
     }
   }
 
-  useEffect(function () {
-    if (!updatingContent) {
-      console.log('content update finished!');
-    }
-  }, [updatingContent]);
+  useEffect(
+    function () {
+      if (!updatingContent) {
+        console.log('content update finished!');
+      }
+    },
+    [updatingContent],
+  );
 
   return (
-    <div className={`${parentClass} pagination ${styleModifiers?.reverseContentOrder ? 'pagination--reverse-content-order' : ''}`}>
+    <div
+      className={`${parentClass} pagination ${
+        styleModifiers?.reverseContentOrder ? 'pagination--reverse-content-order' : ''
+      }`}
+    >
       {render(content)}
 
-      <ButtonGroup parentClass="pagination__button-group" settings={{ currentPage, totalPages, ...buttonGroupSettings }} updateCurrentPage={updateCurrentPageData} updatingContent={updatingContent} />
+      <ButtonGroup
+        parentClass="pagination__button-group"
+        settings={{ currentPage, totalPages, ...buttonGroupSettings }}
+        updateCurrentPage={updateCurrentPageData}
+        updatingContent={updatingContent}
+      />
     </div>
   );
-}
+};
 
 export default Pagination;

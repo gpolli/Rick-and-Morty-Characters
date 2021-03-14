@@ -7,7 +7,16 @@ import Button from '../Button';
 import './style.css';
 
 const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent }) => {
-  const { currentPage, totalPages, labels, amountToShow, showStartButton, showEndButton, reinitOnContentUpdate, styleModifiers } = settings;
+  const {
+    currentPage,
+    totalPages,
+    labels,
+    amountToShow,
+    showStartButton,
+    showEndButton,
+    reinitOnContentUpdate,
+    styleModifiers,
+  } = settings;
   // const { position, size, shape } = styleModifiers;
   const [buttons, setButtons] = useState([]);
 
@@ -36,42 +45,82 @@ const ButtonGroup = ({ parentClass, settings, updateCurrentPage, updatingContent
       }
 
       for (let i = leftLimit; i <= rightLimit; i++) {
-        buttons.push(<Button className={`${i === currentPage ? "button--is-active" : ""}`} text={labels[i]} clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () { }} key={i} />);
+        buttons.push(
+          <Button
+            className={`${i === currentPage ? 'button--is-active' : ''}`}
+            text={labels[i]}
+            clickEvent={i !== currentPage ? () => updateCurrentPage(i) : function () {}}
+            key={i}
+          />,
+        );
       }
 
       if (showStartButton) {
-        buttons.unshift(<Button disabled={currentPage === 1} clickEvent={() => updateCurrentPage(1)} key={0}><img className="button__icon button__icon--reverse-direction" src={double_chevron} alt="Double chevron left" /></Button>);
+        buttons.unshift(
+          <Button disabled={currentPage === 1} clickEvent={() => updateCurrentPage(1)} key={0}>
+            <img
+              className="button__icon button__icon--reverse-direction"
+              src={double_chevron}
+              alt="Double chevron left"
+            />
+          </Button>,
+        );
       }
 
       if (showEndButton) {
-        buttons.push(<Button disabled={currentPage === totalPages} clickEvent={() => updateCurrentPage(totalPages)} key={totalPages + 1}><img className="button__icon" src={double_chevron} alt="Double chevron right" /></Button>);
+        buttons.push(
+          <Button
+            disabled={currentPage === totalPages}
+            clickEvent={() => updateCurrentPage(totalPages)}
+            key={totalPages + 1}
+          >
+            <img className="button__icon" src={double_chevron} alt="Double chevron right" />
+          </Button>,
+        );
       }
 
       setButtons(buttons);
     }
   }
 
-  useEffect(function () {
-    renderButtons(currentPage, totalPages, amountToShow);
-  }, [currentPage, totalPages, labels])
-
-  useEffect(function () {
-    if (!updatingContent) {
+  useEffect(
+    function () {
       renderButtons(currentPage, totalPages, amountToShow);
-    }
-  }, [updatingContent]);
+    },
+    [currentPage, totalPages, labels],
+  );
 
-  useEffect(function () {
-    if (reinitOnContentUpdate) {
-      updateCurrentPage(1);
-    }
-  }, [labels]);
+  useEffect(
+    function () {
+      if (!updatingContent) {
+        renderButtons(currentPage, totalPages, amountToShow);
+      }
+    },
+    [updatingContent],
+  );
+
+  useEffect(
+    function () {
+      if (reinitOnContentUpdate) {
+        updateCurrentPage(1);
+      }
+    },
+    [labels],
+  );
 
   return (
-    <section className={`${parentClass ? parentClass : ''} button-group ${styleModifiers?.size ? (`button-group--${styleModifiers.size}`) : ''} ${styleModifiers?.buttonWidth ? (`button-group--button-width-${styleModifiers.buttonWidth}`) : ''}`}>
+    <section
+      className={`${parentClass ? parentClass : ''} button-group ${
+        styleModifiers?.size ? `button-group--${styleModifiers.size}` : ''
+      } ${
+        styleModifiers?.buttonWidth
+          ? `button-group--button-width-${styleModifiers.buttonWidth}`
+          : ''
+      }`}
+    >
       {buttons}
     </section>
   );
-}
+};
 
 export default ButtonGroup;
