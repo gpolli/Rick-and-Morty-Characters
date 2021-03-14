@@ -12,7 +12,7 @@
 
 @media (min-width: 2200px) {
   .homepage {
-    background-image: none;
+    background-size: contain;
   }
 }
 
